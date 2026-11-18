@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: var(--ff-display), Georgia, serif;
+  --font-body: var(--ff-body), system-ui, sans-serif;
+
+  /* Sampled from the photographs: moss and forest, the jade river, yellow chairs. */
+  --color-paper: #f2efe6;
+  --color-fog: #e2e6d9;
+  --color-ink: #16231b;
+  --color-muted: #4a574d;
+  --color-moss: #2a4532;
+  --color-forest: #1b2f22;
+  --color-jade: #1d6a60;
+  --color-river: #8fd3c4;
+  --color-ochre: #e0a32e;
+
+  /* Hero photo settles in once on load. */
+  --animate-settle: settle 2.4s cubic-bezier(.2,.7,.2,1) both;
+  @keyframes settle { from { transform: scale(1.06); } }
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { @apply bg-paper text-ink font-body antialiased; }
+  ::selection { @apply bg-river text-forest; }
+  :focus-visible { outline: 2px solid var(--color-ochre); outline-offset: 3px; }
+  dialog::backdrop { background: rgb(22 35 27 / .85); }
+}

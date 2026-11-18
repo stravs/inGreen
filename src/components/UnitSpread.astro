@@ -1,0 +1,62 @@
+---
+import Photo from './Photo.astro';
+import type { Unit } from '../data/house';
+
+interface Props { unit: Unit; flip?: boolean }
+const { unit, flip = false } = Astro.props;
+const dialog = `photos-${unit.id}`;
+---
+<article id={unit.id} class="border-t border-ink/15 py-14 lg:py-20">
+  <div class="grid gap-8 lg:grid-cols-12 lg:gap-12">
+    <div class:list={['lg:col-span-7', flip && 'lg:order-2']}>
+      <Photo id={unit.hero} sizes="(min-width: 1152px) 640px, (min-width: 1024px) 56vw, 100vw" class="aspect-[4/3] rounded-sm"
+        caption={unit.outdoor} />
+      <div class="mt-4 grid grid-cols-3 gap-2">
+        {unit.thumbs.map((id, i) => i < unit.thumbs.length - 1
+          ? <Photo id={id} sizes="(min-width: 1024px) 210px, 30vw" class="aspect-[4/3] rounded-sm" />
+          : (
+            <button type="button" command="show-modal" commandfor={dialog} class="group relative cursor-pointer overflow-hidden rounded-sm">
+              <Photo id={id} sizes="(min-width: 1024px) 210px, 30vw" class="aspect-[4/3] transition-transform duration-300 group-hover:scale-105" />
+              <span class="absolute inset-0 flex items-center justify-center bg-forest/55 text-sm font-medium text-paper">All {unit.photos.length} photos</span>
+            </button>
+          ))}
+      </div>
+    </div>
+    <div class:list={['lg:col-span-5', flip && 'lg:order-1']}>
+      <h3 class="font-display text-4xl leading-none sm:text-5xl">{unit.name}</h3>
+      <p class="mt-2 font-display text-2xl italic text-muted">{unit.nickname}</p>
+      <p class="mt-6 text-[17px] leading-relaxed">{unit.text}</p>
+
+      <dl class="mt-8 grid grid-cols-2 gap-x-6 border-t border-ink/15">
+        {[
+          ['Size', `${unit.area} m²`],
+          ['Sleeps', unit.sleeps],
+          ['Bedrooms', String(unit.bedrooms)],
+          ['Bathrooms', String(unit.bathrooms)],
+        ].map(([k, v]) => (
+          <div class="border-b border-ink/15 py-3"><dt class="text-sm text-muted">{k}</dt><dd class="mt-0.5">{v}</dd></div>
+        ))}
+        <div class="col-span-2 border-b border-ink/15 py-3"><dt class="text-sm text-muted">Beds</dt><dd class="mt-0.5">{unit.beds}</dd></div>
+        <div class="col-span-2 border-b border-ink/15 py-3"><dt class="text-sm text-muted">Access</dt><dd class="mt-0.5">{unit.access}</dd></div>
+      </dl>
+      <ul class="mt-5 flex flex-wrap gap-2 text-sm">
+        {unit.extras.map(e => <li class="rounded-full border border-ink/20 px-3 py-1">{e}</li>)}
+      </ul>
+      <a href="#enquire" data-enquiry-unit={unit.id}
+        class="mt-8 inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-moss">Enquire about this apartment</a>
+    </div>
+  </div>
+
+  <dialog id={dialog} closedby="any" aria-labelledby={`${dialog}-title`}
+    class="m-0 h-dvh max-h-none w-screen max-w-none bg-transparent p-0 backdrop:bg-forest/90">
+    <div class="min-h-full bg-paper">
+      <header class="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-ink/15 bg-paper px-5 py-4 sm:px-8">
+        <h4 id={`${dialog}-title`} class="font-display text-2xl">{unit.name} <span class="font-body text-sm text-muted">· {unit.photos.length} photos</span></h4>
+        <button type="button" command="close" commandfor={dialog} class="cursor-pointer rounded-full border border-forest px-4 py-2 text-sm font-medium text-forest hover:bg-forest hover:text-paper">Close ✕</button>
+      </header>
+      <div class="mx-auto max-w-5xl columns-1 gap-4 px-5 py-6 sm:columns-2 sm:px-8">
+        {unit.photos.map(id => <div class="mb-4 break-inside-avoid"><Photo id={id} sizes="(min-width: 640px) 480px, 100vw" class="rounded-sm" /></div>)}
+      </div>
+    </div>
+  </dialog>
+</article>

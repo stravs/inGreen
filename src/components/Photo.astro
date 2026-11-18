@@ -1,0 +1,19 @@
+---
+import { Image } from 'astro:assets';
+import { photo } from '../data/house';
+
+interface Props { id: string; sizes: string; class?: string; eager?: boolean; caption?: string }
+const { id, sizes, class: className = '', eager = false, caption } = Astro.props;
+const p = photo(id);
+const widths = [400, 640, 960, 1280, 1600, 2000].filter(w => w < p.src.width).concat(Math.min(p.src.width, 2400));
+---
+{caption ? (
+  <figure>
+    <Image src={p.src} alt={p.alt} widths={widths} sizes={sizes} class:list={['block w-full object-cover', className]}
+      loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} />
+    <figcaption class="mt-2 text-sm text-current/65">{caption}</figcaption>
+  </figure>
+) : (
+  <Image src={p.src} alt={p.alt} widths={widths} sizes={sizes} class:list={['block w-full object-cover', className]}
+    loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} />
+)}
