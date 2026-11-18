@@ -12,6 +12,8 @@ const faces = (pkg, file, weight, style) => [
 const family = (name, cssVariable, fallbacks, variants) => ({ provider: fontProviders.local(), name, cssVariable, fallbacks, options: { variants } });
 
 export default defineConfig({
+  output: 'static',
+  trailingSlash: 'always',
   image: { layout: 'constrained', responsiveStyles: false },
   fonts: [
     family('Instrument Serif', '--ff-display', ['Georgia', 'serif'], [
