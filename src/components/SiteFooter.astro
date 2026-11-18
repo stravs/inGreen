@@ -1,0 +1,37 @@
+---
+import { booking, directions, nav } from '../data/house';
+
+const eyebrow = 'text-xs font-semibold uppercase tracking-[0.16em]';
+---
+<!-- Footer: continues the forest of the enquiry section, a quiet sign-off -->
+<footer class="bg-ink text-paper/75">
+  <div class="mx-auto grid max-w-6xl gap-10 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-12">
+    <div class="sm:col-span-2 lg:col-span-5">
+      <a href="/" class="font-display text-4xl text-paper">InGreen House</a>
+      <p class="mt-4 max-w-sm font-display text-xl italic leading-snug text-river">Birds above. The river below.</p>
+      <p class="mt-4 max-w-sm text-sm leading-relaxed">Four self-catering apartments in a green garden above the Sava Bohinjka, 5 km from Bled.</p>
+    </div>
+    <nav aria-label="Footer" class="lg:col-span-3 lg:col-start-7">
+      <h2 class={`${eyebrow} text-paper`}>Explore</h2>
+      <ul class="mt-4 space-y-2.5 text-sm">
+        {[['/#house', 'Apartments'], ...nav, ['#enquire', 'Enquire']].map(([href, name]) => (
+          <li><a href={href} class="underline-offset-4 hover:text-river hover:underline">{name}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="lg:col-span-3">
+      <h2 class={`${eyebrow} text-paper`}>Find us</h2>
+      <address class="mt-4 text-sm not-italic leading-relaxed">Obrne 2<br />4263 Bohinjska Bela<br />Slovenia</address>
+      <ul class="mt-4 space-y-2.5 text-sm">
+        <li><a href={directions} rel="noopener" target="_blank" class="underline-offset-4 hover:text-river hover:underline">Directions ↗</a></li>
+        <li><a href={booking} rel="noopener" target="_blank" class="underline-offset-4 hover:text-river hover:underline">Booking.com ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div class="flex flex-wrap items-center justify-between gap-4 border-t border-paper/15 py-6 text-xs">
+      <p>© {new Date().getFullYear()} InGreen House · Obrne, Julian Alps</p>
+      <a href="#top" class="hover:text-river">Back to top ↑</a>
+    </div>
+  </div>
+</footer>

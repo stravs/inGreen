@@ -20,6 +20,9 @@ export const capturedAt = '2026-11-18';
 export const coords = { lat: 46.327803, lng: 14.058447 };
 export const directions = `https://www.google.com/maps/dir/?api=1&destination=${coords.lat},${coords.lng}`;
 
+// Home-page sections, linked from every page's nav.
+export const nav = [['/#garden', 'Garden'], ['/#river', 'River'], ['/#host', 'Host'], ['/#know', 'Good to know']] as const;
+
 export const levels = [
   { id: 'road', name: 'The road', hint: 'Bus stop and parking at the gate' },
   { id: 'house', name: 'The house', hint: 'Four apartments, four outdoor rooms' },
@@ -32,7 +35,7 @@ export type Unit = {
   id: string; name: string; nickname: string;
   area: number; sleeps: string; beds: string; bedrooms: number; bathrooms: number; access: string;
   text: string; outdoor: string; extras: string[];
-  hero: string; thumbs: string[]; photos: string[];
+  hero: string; photos: string[];
 };
 
 // Occupancy labels and bed wording are Booking's room-table text, kept verbatim.
@@ -45,7 +48,7 @@ export const units: Unit[] = [
     text: 'The biggest of the four and the one that feels most like a whole house: a living room with a wood stove and a hammock chair, two bedrooms, a bathroom with a bath and a second with a walk-in shower, and a private hot tub.',
     outdoor: 'A paved patio with a big table, umbrella and stone grill.',
     extras: ['Private hot tub', 'Fireplace', 'Dishwasher & oven', 'Air conditioning'],
-    hero: '924991603', thumbs: ['512110168', '513290865', '332003678'],
+    hero: '924991603',
     photos: ['924991603', '512110168', '512110169', '512110166', '513290865', '525701654', '525701649', '403540787', '403540783', '339186612', '332003678', '208741960'],
   },
   {
@@ -55,7 +58,7 @@ export const units: Unit[] = [
     text: 'Up the outside staircase, under a painted forest of deer: a living room with a wood stove, one bedroom with two singles and a double, a sofa bed and a shower room.',
     outdoor: 'A covered wooden terrace looking straight at the mountain.',
     extras: ['Terrace', 'Fireplace', 'Dishwasher & oven', 'Air conditioning'],
-    hero: '906928033', thumbs: ['328818754', '328818759', '411804929'],
+    hero: '906928033',
     photos: ['906928033', '413565624', '328818756', '328818759', '328818754', '328818762', '328818744', '411804929', '229532824', '423640109', '411804924', '411804927', '208742954', '413565608'],
   },
   {
@@ -65,7 +68,7 @@ export const units: Unit[] = [
     text: 'The attic: timber beams, skylights and one long open room for cooking, eating and sitting, with two bedrooms and a shower room. Reached by an open staircase.',
     outdoor: 'An outdoor kitchen and long table under a canopy, against the rock wall.',
     extras: ['Outdoor kitchen', 'Skylights', 'Dishwasher & oven', 'Air conditioning'],
-    hero: '478875182', thumbs: ['512110375', '643563695', '662998577'],
+    hero: '478875182',
     photos: ['478875182', '512110375', '512110378', '512110373', '512110377', '512110374', '643563695', '208743660', '250524226', '662998577', '531024159', '531024156', '675398780'],
   },
   {
@@ -75,7 +78,7 @@ export const units: Unit[] = [
     text: 'A small wooden cabin of its own in the garden, for two. Pine walls, a little kitchen and table, a sofa, a ladder up to the sleeping loft under string lights, and a compact shower room.',
     outdoor: 'Its own porch with two yellow chairs, facing the lawn and forest.',
     extras: ['Detached', 'Sleeping loft', 'Kitchen', 'Air conditioning'],
-    hero: '463854133', thumbs: ['539046016', '536454706', '461706288'],
+    hero: '463854133',
     photos: ['463854133', '208744064', '536454706', '536454701', '539046016', '439322776', '461706288', '461706124', '208744158', '208744133'],
   },
 ];

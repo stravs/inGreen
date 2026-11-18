@@ -1,0 +1,97 @@
+---
+import { nav, units } from '../data/house';
+
+const cta = 'inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-colors';
+const path = Astro.url.pathname;
+const href = (id: string) => `/apartments/${id}/`;
+---
+<!-- Fixed nav: clear at the top, white on scroll, with a thin green progress line. -->
+<header id="site-header" class="group fixed inset-x-0 top-0 z-40 border-b border-ink/10 bg-white text-ink transition-colors duration-300
+  data-over:border-white/0 data-over:bg-white/0 data-over:text-paper">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
+    <a href="/" class="font-display text-2xl">InGreen House</a>
+    <nav aria-label="Main" class="hidden lg:block">
+      <ul class="flex items-center gap-7 text-base font-medium">
+        <!-- Apartments dropdown: opens on hover or keyboard focus, no JS. -->
+        <li class="group/dd relative">
+          <a href="/#house" class="inline-flex items-center gap-1.5 underline-offset-4 hover:text-jade hover:underline group-data-over:hover:text-river">
+            Apartments <span aria-hidden="true" class="text-[10px] transition-transform group-hover/dd:rotate-180 group-focus-within/dd:rotate-180">▼</span>
+          </a>
+          <div class="invisible absolute left-1/2 top-full w-80 -translate-x-1/2 pt-4 opacity-0 transition duration-200 group-hover/dd:visible group-hover/dd:opacity-100 group-focus-within/dd:visible group-focus-within/dd:opacity-100">
+            <ul class="rounded-sm border border-ink/10 bg-paper p-2 text-ink shadow-xl shadow-forest/20">
+              {units.map(u => (
+                <li>
+                  <a href={href(u.id)} aria-current={path === href(u.id) ? 'page' : undefined}
+                    class="block rounded-sm px-4 py-3 transition-colors hover:bg-fog aria-[current=page]:bg-fog">
+                    <span class="block font-display text-xl leading-tight">{u.name}</span>
+                    <span class="mt-0.5 block font-normal text-muted">{u.area} m² · {u.sleeps}</span>
+                  </a>
+                </li>
+              ))}
+              <li class="mt-1 border-t border-ink/10"><a href="/#house" class="block px-4 pb-2 pt-3 text-jade hover:underline">All apartments →</a></li>
+            </ul>
+          </div>
+        </li>
+        {nav.map(([href, label]) => <li><a href={href} class="underline-offset-4 hover:text-jade hover:underline group-data-over:hover:text-river">{label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="#enquire" class="rounded-full bg-forest px-5 py-2.5 text-sm lg:text-base font-medium text-paper transition-colors hover:bg-moss group-data-over:bg-paper group-data-over:text-forest group-data-over:hover:bg-river">Enquire</a>
+      <button type="button" popovertarget="menu" class="cursor-pointer rounded-full border border-ink/30 px-4 py-2.5 text-sm font-medium group-data-over:border-paper/60 lg:hidden">Menu</button>
+    </div>
+  </div>
+  <div aria-hidden="true" class="h-0.5 bg-jade" style="width: calc(var(--p, 0) * 100%)"></div>
+</header>
+<!-- Set before first paint so the nav starts clear; without JS it stays solid white. -->
+<script is:inline>{ if (scrollY < 8) document.getElementById('site-header').dataset.over = ''; }</script>
+
+<!-- Mobile menu: native popover, opens without JS. -->
+<div id="menu" popover class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-paper p-0 text-ink lg:hidden" aria-label="Menu">
+  <div class="flex items-center justify-between gap-4 border-b border-ink/10 px-5 py-3 sm:px-8">
+    <span class="font-display text-2xl">InGreen House</span>
+    <button type="button" popovertarget="menu" popovertargetaction="hide" class="cursor-pointer rounded-full border border-ink/30 px-4 py-2.5 text-sm font-medium">Close ✕</button>
+  </div>
+  <nav aria-label="Mobile" class="px-5 py-6 sm:px-8">
+    <ul class="divide-y divide-ink/15 border-y border-ink/15">
+      <li>
+        <details open class="group/apt">
+          <summary class="flex cursor-pointer list-none items-center justify-between py-4 font-display text-3xl [&::-webkit-details-marker]:hidden">
+            Apartments <span aria-hidden="true" class="font-body text-sm transition-transform group-open/apt:rotate-180">▼</span>
+          </summary>
+          <ul class="mb-4 ml-1 border-l border-jade/40 pl-4">
+            {units.map(u => (
+              <li><a href={href(u.id)} aria-current={path === href(u.id) ? 'page' : undefined} class="block py-2 aria-[current=page]:text-jade"><span class="block text-lg">{u.name}</span><span class="block text-sm text-muted">{u.area} m² · {u.sleeps}</span></a></li>
+            ))}
+            <li><a href="/#house" class="block py-2 text-jade">All apartments →</a></li>
+          </ul>
+        </details>
+      </li>
+      {nav.map(([href, label]) => <li><a href={href} class="block py-4 font-display text-3xl">{label}</a></li>)}
+    </ul>
+    <a href="#enquire" class={`${cta} mt-8 w-full justify-center bg-forest text-paper hover:bg-moss`}>Send an enquiry</a>
+  </nav>
+</div>
+
+<script>
+  // Nav: clear only at the very top; solid background below the hero.
+  const header = document.querySelector<HTMLElement>('#site-header')!;
+  const fade = () => header.toggleAttribute('data-over', scrollY < 8);
+  addEventListener('scroll', fade, { passive: true });
+  fade();
+
+  // Progress line: the road-to-river sections on the home page, the whole page elsewhere.
+  const sections = [...document.querySelectorAll<HTMLElement>('[data-level]')];
+  const update = () => {
+    const first = sections[0], last = sections.at(-1);
+    const top = first?.offsetTop ?? 0;
+    const end = (last ? last.offsetTop + last.offsetHeight : document.documentElement.scrollHeight) - innerHeight;
+    header.style.setProperty('--p', String(Math.min(1, Math.max(0, (scrollY - top) / Math.max(1, end - top)))));
+  };
+  addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', update);
+  update();
+
+  // Mobile menu: close after picking a link.
+  const menu = document.querySelector<HTMLElement>('#menu')!;
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.hidePopover()));
+</script>

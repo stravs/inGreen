@@ -2,84 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import Photo from '../components/Photo.astro';
 import Level from '../components/Level.astro';
-import UnitSpread from '../components/UnitSpread.astro';
+import UnitCard from '../components/UnitCard.astro';
 import Distances from '../components/Distances.astro';
-import { booking, categories, directions, levels, practical, score, units } from '../data/house';
+import Enquire from '../components/Enquire.astro';
+import { booking, categories, levels, practical, score, units } from '../data/house';
 
 const cta = 'inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-colors';
 const eyebrow = 'text-xs font-semibold uppercase tracking-[0.16em]';
-const nav = [['#garden', 'Garden'], ['#river', 'River'], ['#host', 'Host'], ['#know', 'Good to know']];
-const label = 'block text-sm font-medium';
-const field = 'mt-1.5 block w-full rounded-sm border border-ink/25 bg-white/70 px-3 py-2.5 text-base focus:border-jade';
 ---
 <Layout title="InGreen House — Obrne, between Bled and Bohinj"
   description="Four self-catering apartments in a big green garden above the Sava Bohinjka river, in a village of about twenty houses, 5 km from Bled.">
-
-  <!-- Fixed nav: clear at the top, white on scroll, with a thin green progress line. -->
-  <header id="site-header" class="group fixed inset-x-0 top-0 z-40 border-b border-ink/10 bg-white text-ink transition-colors duration-300
-    data-over:border-white/0 data-over:bg-white/0 data-over:text-paper">
-    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
-      <a href="#top" class="font-display text-2xl">InGreen House</a>
-      <nav aria-label="Main" class="hidden lg:block">
-        <ul class="flex items-center gap-7 text-base font-medium">
-          <!-- Apartments dropdown: opens on hover or keyboard focus, no JS. -->
-          <li class="group/dd relative">
-            <a href="#house" class="inline-flex items-center gap-1.5 underline-offset-4 hover:text-jade hover:underline group-data-over:hover:text-river">
-              Apartments <span aria-hidden="true" class="text-[10px] transition-transform group-hover/dd:rotate-180 group-focus-within/dd:rotate-180">▼</span>
-            </a>
-            <div class="invisible absolute left-1/2 top-full w-80 -translate-x-1/2 pt-4 opacity-0 transition duration-200 group-hover/dd:visible group-hover/dd:opacity-100 group-focus-within/dd:visible group-focus-within/dd:opacity-100">
-              <ul class="rounded-sm border border-ink/10 bg-paper p-2 text-ink shadow-xl shadow-forest/20">
-                {units.map(u => (
-                  <li>
-                    <a href={`#${u.id}`} class="block rounded-sm px-4 py-3 transition-colors hover:bg-fog">
-                      <span class="block font-display text-xl leading-tight">{u.name}</span>
-                      <span class="mt-0.5 block font-normal text-muted">{u.area} m² · {u.sleeps}</span>
-                    </a>
-                  </li>
-                ))}
-                <li class="mt-1 border-t border-ink/10"><a href="#house" class="block px-4 pb-2 pt-3 text-jade hover:underline">All apartments →</a></li>
-              </ul>
-            </div>
-          </li>
-          {nav.map(([href, label]) => <li><a href={href} class="underline-offset-4 hover:text-jade hover:underline group-data-over:hover:text-river">{label}</a></li>)}
-        </ul>
-      </nav>
-      <div class="flex items-center gap-2">
-        <a href="#enquire" class="rounded-full bg-forest px-5 py-2.5 text-sm lg:text-base font-medium text-paper transition-colors hover:bg-moss group-data-over:bg-paper group-data-over:text-forest group-data-over:hover:bg-river">Enquire</a>
-        <button type="button" popovertarget="menu" class="cursor-pointer rounded-full border border-ink/30 px-4 py-2.5 text-sm font-medium group-data-over:border-paper/60 lg:hidden">Menu</button>
-      </div>
-    </div>
-    <div aria-hidden="true" class="h-0.5 bg-jade" style="width: calc(var(--p, 0) * 100%)"></div>
-  </header>
-  <!-- Set before first paint so the nav starts clear; without JS it stays solid white. -->
-  <script is:inline>{ if (scrollY < 8) document.getElementById('site-header').dataset.over = ''; }</script>
-
-  <!-- Mobile menu: native popover, opens without JS. -->
-  <div id="menu" popover class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-paper p-0 text-ink lg:hidden" aria-label="Menu">
-    <div class="flex items-center justify-between gap-4 border-b border-ink/10 px-5 py-3 sm:px-8">
-      <span class="font-display text-2xl">InGreen House</span>
-      <button type="button" popovertarget="menu" popovertargetaction="hide" class="cursor-pointer rounded-full border border-ink/30 px-4 py-2.5 text-sm font-medium">Close ✕</button>
-    </div>
-    <nav aria-label="Mobile" class="px-5 py-6 sm:px-8">
-      <ul class="divide-y divide-ink/15 border-y border-ink/15">
-        <li>
-          <details open class="group/apt">
-            <summary class="flex cursor-pointer list-none items-center justify-between py-4 font-display text-3xl [&::-webkit-details-marker]:hidden">
-              Apartments <span aria-hidden="true" class="font-body text-sm transition-transform group-open/apt:rotate-180">▼</span>
-            </summary>
-            <ul class="mb-4 ml-1 border-l border-jade/40 pl-4">
-              {units.map(u => (
-                <li><a href={`#${u.id}`} class="block py-2"><span class="block text-lg">{u.name}</span><span class="block text-sm text-muted">{u.area} m² · {u.sleeps}</span></a></li>
-              ))}
-              <li><a href="#house" class="block py-2 text-jade">All apartments →</a></li>
-            </ul>
-          </details>
-        </li>
-        {nav.map(([href, label]) => <li><a href={href} class="block py-4 font-display text-3xl">{label}</a></li>)}
-      </ul>
-      <a href="#enquire" class={`${cta} mt-8 w-full justify-center bg-forest text-paper hover:bg-moss`}>Send an enquiry</a>
-    </nav>
-  </div>
 
   <main id="top">
     <!-- Hero: the whole property in one frame, house above the garden, forest behind -->
@@ -152,20 +84,9 @@ const field = 'mt-1.5 block w-full rounded-sm border border-ink/25 bg-white/70 p
             Every apartment has its own entrance, its own kitchen and its own place to eat outside, with a barbecue. Choose by the outdoor room you want to come back to in the evening. Old and new are mixed throughout, and all the bedding is cotton.
           </p>
         </div>
-        <ol class="mt-12 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {units.map(u => (
-            <li>
-              <a href={`#${u.id}`} class="group block">
-                <Photo id={u.hero} sizes="(min-width: 1024px) 270px, 45vw" class="aspect-[4/3] rounded-sm transition-opacity group-hover:opacity-85" />
-                <p class="mt-3 font-display text-xl leading-tight group-hover:underline">{u.name}</p>
-                <p class="mt-0.5 text-sm text-muted">{u.area} m² · {u.sleeps}</p>
-              </a>
-            </li>
-          ))}
+        <ol class="mt-12 grid gap-x-6 gap-y-12 pb-16 sm:grid-cols-2 lg:grid-cols-4 lg:pb-20">
+          {units.map(u => <li><UnitCard unit={u} /></li>)}
         </ol>
-        <div class="mt-14">
-          {units.map((u, i) => <UnitSpread unit={u} flip={i % 2 === 1} />)}
-        </div>
       </div>
     </Level>
 
@@ -281,123 +202,7 @@ const field = 'mt-1.5 block w-full rounded-sm border border-ink/25 bg-white/70 p
       </div>
     </section>
 
-    <!-- Enquire: the main call to action -->
-    <section id="enquire" class="bg-forest text-paper" aria-labelledby="enquire-title">
-      <div class="mx-auto grid max-w-6xl gap-12 px-5 py-20 sm:px-8 lg:grid-cols-12 lg:py-24">
-        <div class="lg:col-span-5">
-          <p class={`${eyebrow} text-river`}>Enquire</p>
-          <h2 id="enquire-title" class="mt-4 font-display text-5xl leading-none sm:text-7xl">Come and listen.</h2>
-          <p class="mt-6 text-lg leading-relaxed text-paper/85">Tell Elizabeta when you want to come and who is coming. An enquiry is not a booking.</p>
-          <address class="mt-8 not-italic text-paper/80">Obrne 2, 4263 Bohinjska Bela, Slovenia</address>
-          <div class="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium">
-            <a href={directions} rel="noopener" target="_blank" class="underline underline-offset-4 hover:text-river">Directions ↗</a>
-            <a href={booking} rel="noopener" target="_blank" class="underline underline-offset-4 hover:text-river">Or book on Booking.com ↗</a>
-          </div>
-        </div>
-
-        <form id="enquiry-form" class="rounded-sm bg-paper p-6 text-ink sm:p-8 lg:col-span-7">
-          <fieldset disabled id="enquiry-fields" class="grid grid-cols-2 gap-x-4 gap-y-5 sm:gap-x-5">
-            <legend class="sr-only">Your enquiry</legend>
-            <label class={`${label} col-span-2 sm:col-span-1`}>Name<input name="name" autocomplete="name" required maxlength="100" class={field} /></label>
-            <label class={`${label} col-span-2 sm:col-span-1`}>Email<input name="email" type="email" autocomplete="email" required maxlength="254" class={field} /></label>
-            <label class={`${label} col-span-2`}>Apartment
-              <select name="unit" class={field}>
-                <option value="">Help me choose</option>
-                {units.map(u => <option value={u.id}>{u.name} ({u.sleeps})</option>)}
-              </select>
-            </label>
-            <label class={label}>Arrival<input name="arrival" type="date" required class={field} /></label>
-            <label class={label}>Departure<input name="departure" type="date" required class={field} /></label>
-            <label class={label}>Adults<input name="adults" type="number" min="1" value="2" required class={field} /></label>
-            <label class={label}>Children<input name="children" type="number" min="0" value="0" required class={field} /></label>
-            <label class={`${label} col-span-2`}>Message
-              <textarea name="message" rows="4" maxlength="3000" class={field} placeholder="Children's ages, pets, arrival time, questions…"></textarea>
-            </label>
-            <button type="submit" class={`${cta} cursor-pointer justify-center bg-forest text-paper hover:bg-moss col-span-2 sm:justify-self-start`}>Send enquiry</button>
-          </fieldset>
-          <p id="enquiry-status" role="status" tabindex="-1" class="mt-4 text-sm font-medium text-jade empty:hidden"></p>
-          <noscript><p class="mt-4 text-sm text-muted">The form needs JavaScript.</p></noscript>
-        </form>
-      </div>
-    </section>
+    <Enquire />
   </main>
 
-  <!-- Footer: continues the forest of the enquiry section, a quiet sign-off -->
-  <footer class="bg-ink text-paper/75">
-    <div class="mx-auto grid max-w-6xl gap-10 px-5 pb-10 pt-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-12">
-      <div class="sm:col-span-2 lg:col-span-5">
-        <a href="#top" class="font-display text-4xl text-paper">InGreen House</a>
-        <p class="mt-4 max-w-sm font-display text-xl italic leading-snug text-river">Birds above. The river below.</p>
-        <p class="mt-4 max-w-sm text-sm leading-relaxed">Four self-catering apartments in a green garden above the Sava Bohinjka, 5 km from Bled.</p>
-      </div>
-      <nav aria-label="Footer" class="lg:col-span-3 lg:col-start-7">
-        <h2 class={`${eyebrow} text-paper`}>Explore</h2>
-        <ul class="mt-4 space-y-2.5 text-sm">
-          {[['#house', 'Apartments'], ...nav, ['#enquire', 'Enquire']].map(([href, name]) => (
-            <li><a href={href} class="underline-offset-4 hover:text-river hover:underline">{name}</a></li>
-          ))}
-        </ul>
-      </nav>
-      <div class="lg:col-span-3">
-        <h2 class={`${eyebrow} text-paper`}>Find us</h2>
-        <address class="mt-4 text-sm not-italic leading-relaxed">Obrne 2<br />4263 Bohinjska Bela<br />Slovenia</address>
-        <ul class="mt-4 space-y-2.5 text-sm">
-          <li><a href={directions} rel="noopener" target="_blank" class="underline-offset-4 hover:text-river hover:underline">Directions ↗</a></li>
-          <li><a href={booking} rel="noopener" target="_blank" class="underline-offset-4 hover:text-river hover:underline">Booking.com ↗</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="mx-auto max-w-6xl px-5 sm:px-8">
-      <div class="flex flex-wrap items-center justify-between gap-4 border-t border-paper/15 py-6 text-xs">
-        <p>© {new Date().getFullYear()} InGreen House · Obrne, Julian Alps</p>
-        <a href="#top" class="hover:text-river">Back to top ↑</a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    // Nav: clear only at the very top; solid background below the hero.
-    const header = document.querySelector<HTMLElement>('#site-header')!;
-    const fade = () => header.toggleAttribute('data-over', scrollY < 8);
-    addEventListener('scroll', fade, { passive: true });
-    fade();
-
-    // Track scroll depth with the thin progress line. Anchors still work without JS.
-    const sections = [...document.querySelectorAll<HTMLElement>('[data-level]')];
-    const update = () => {
-      const first = sections[0], last = sections.at(-1)!;
-      const top = first.offsetTop, end = last.offsetTop + last.offsetHeight - innerHeight;
-      header.style.setProperty('--p', String(Math.min(1, Math.max(0, (scrollY - top) / Math.max(1, end - top)))));
-    };
-    addEventListener('scroll', update, { passive: true });
-    addEventListener('resize', update);
-    update();
-
-    // Mobile menu: close after picking a link.
-    const menu = document.querySelector<HTMLElement>('#menu')!;
-    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.hidePopover()));
-
-    // Enquiry form. Delivery is not connected: validate, then say plainly that nothing was sent.
-    const form = document.querySelector<HTMLFormElement>('#enquiry-form')!;
-    const fields = document.querySelector<HTMLFieldSetElement>('#enquiry-fields')!;
-    const status = document.querySelector<HTMLElement>('#enquiry-status')!;
-    const input = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
-    const arrival = input('arrival'), departure = input('departure');
-    fields.disabled = false;
-    const now = new Date();
-    arrival.min = departure.min = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    const checkDates = () => departure.setCustomValidity(
-      arrival.value && departure.value && departure.value <= arrival.value ? 'Departure must be after arrival.' : '');
-    arrival.addEventListener('change', () => { if (arrival.value) departure.min = arrival.value; checkDates(); });
-    departure.addEventListener('change', checkDates);
-    document.querySelectorAll<HTMLAnchorElement>('[data-enquiry-unit]').forEach(a =>
-      a.addEventListener('click', () => { input('unit').value = a.dataset.enquiryUnit ?? ''; }));
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      checkDates();
-      if (!form.reportValidity()) return;
-      status.textContent = 'Not sent: enquiry delivery is not connected yet.';
-      status.focus();
-    });
-  </script>
 </Layout>

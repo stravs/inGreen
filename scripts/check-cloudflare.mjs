@@ -37,11 +37,14 @@ try {
   const icon = await fetch(`${origin}/favicon.svg`);
   assert.equal(icon.status, 200);
   assert.ok(!icon.headers.get('cache-control')?.includes('immutable'));
+  const unit = await fetch(`${origin}/apartments/loft/`);
+  assert.equal(unit.status, 200);
+  assert.match(await unit.text(), /<h1[^>]*>Loft<\/h1>/);
   assert.equal((await fetch(`${origin}/missing-page`)).status, 404);
   const redirect = await fetch(`${origin}/index.html`, { redirect: 'manual' });
   assert.equal(redirect.status, 307);
   assert.equal(new URL(redirect.headers.get('location'), origin).pathname, '/');
-  console.log('Cloudflare checks passed: headers, caching, HEAD, redirects and 404.');
+  console.log('Cloudflare checks passed: headers, caching, HEAD, apartment page, redirects and 404.');
 } finally {
   server.kill('SIGTERM');
 }

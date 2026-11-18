@@ -1,0 +1,56 @@
+---
+// Full-screen photo viewer. Open with any button carrying data-lightbox-open="<index>".
+// Swipe or scroll natively (scroll-snap); buttons and arrow keys step one photo.
+import Photo from './Photo.astro';
+
+interface Props { photos: string[]; label: string }
+const { photos, label } = Astro.props;
+const nav = 'absolute top-1/2 hidden size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-paper/10 text-2xl transition-colors hover:bg-paper/25 sm:flex';
+---
+<dialog id="lightbox" closedby="any" aria-label={label}
+  class="m-0 h-dvh max-h-none w-screen max-w-none bg-transparent p-0 text-paper backdrop:bg-ink/95">
+  <div class="relative flex h-full flex-col">
+    <div class="flex items-center justify-between gap-4 px-5 py-3 sm:px-8">
+      <p class="text-sm tabular-nums"><span data-lightbox-count>1</span> / {photos.length}</p>
+      <button type="button" command="close" commandfor="lightbox" class="cursor-pointer rounded-full border border-paper/50 px-4 py-2 text-sm font-medium hover:bg-paper hover:text-ink">Close ✕</button>
+    </div>
+    <div data-lightbox-track tabindex="-1" class="flex min-h-0 flex-1 snap-x snap-mandatory overflow-x-auto overscroll-x-contain outline-none [scrollbar-width:none]">
+      {photos.map(id => (
+        <div class="flex h-full w-full shrink-0 snap-center items-center justify-center px-2 pb-6 sm:px-20">
+          <Photo id={id} sizes="100vw" class="h-full object-contain!" />
+        </div>
+      ))}
+    </div>
+    <button type="button" data-lightbox-step="-1" aria-label="Previous photo" class={`${nav} left-4`}>‹</button>
+    <button type="button" data-lightbox-step="1" aria-label="Next photo" class={`${nav} right-4`}>›</button>
+  </div>
+</dialog>
+
+<script>
+  const box = document.querySelector<HTMLDialogElement>('#lightbox');
+  if (box) {
+    const track = box.querySelector<HTMLElement>('[data-lightbox-track]')!;
+    const count = box.querySelector<HTMLElement>('[data-lightbox-count]')!;
+    const slides = [...track.children] as HTMLElement[];
+    const smooth = () => matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth';
+    const current = () => Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+    const go = (i: number, behavior: ScrollBehavior = smooth()) => {
+      const slide = slides[Math.min(slides.length - 1, Math.max(0, i))];
+      track.scrollTo({ left: slide.offsetLeft, behavior });
+    };
+
+    document.querySelectorAll<HTMLElement>('[data-lightbox-open]').forEach(b => b.addEventListener('click', () => {
+      box.showModal();
+      go(Number(b.dataset.lightboxOpen), 'instant');
+      track.focus();
+    }));
+    box.querySelectorAll<HTMLElement>('[data-lightbox-step]').forEach(b =>
+      b.addEventListener('click', () => go(current() + Number(b.dataset.lightboxStep))));
+    box.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      go(current() + (e.key === 'ArrowLeft' ? -1 : 1));
+    });
+    track.addEventListener('scroll', () => { count.textContent = String(current() + 1); }, { passive: true });
+  }
+</script>
