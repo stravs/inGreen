@@ -6,6 +6,16 @@ const { unit = '' } = Astro.props;
 const cta = 'inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-colors';
 const label = 'block text-sm font-medium';
 const field = 'mt-1.5 block w-full rounded-sm border border-ink/25 bg-white/70 px-3 py-2.5 text-base focus:border-jade';
+// Cally month styling via ::part, see https://wicky.nillia.ms/cally/
+const month = [
+  'mx-auto [--color-accent:var(--color-forest)] [--color-text-on-accent:var(--color-paper)]',
+  '[&::part(heading)]:pb-2 [&::part(heading)]:font-display [&::part(heading)]:text-2xl',
+  '[&::part(th)]:text-xs [&::part(th)]:font-medium [&::part(th)]:text-muted',
+  '[&::part(button)]:size-11 [&::part(button)]:cursor-pointer [&::part(button)]:rounded-full [&::part(button)]:text-base',
+  '[&::part(today)]:font-bold [&::part(today)]:underline [&::part(today)]:underline-offset-4',
+  '[&::part(range-inner)]:rounded-none [&::part(range-inner)]:bg-river/35 [&::part(range-inner)]:text-ink',
+  '[&::part(disallowed)]:cursor-default [&::part(disallowed)]:line-through',
+].join(' ');
 ---
 <!-- Enquire: the main call to action -->
 <section id="enquire" class="bg-forest text-paper" aria-labelledby="enquire-title">
@@ -32,8 +42,14 @@ const field = 'mt-1.5 block w-full rounded-sm border border-ink/25 bg-white/70 p
             {units.map(u => <option value={u.id} selected={u.id === unit}>{u.name} ({u.sleeps})</option>)}
           </select>
         </label>
-        <label class={label}>Arrival<input name="arrival" type="date" required class={field} /></label>
-        <label class={label}>Departure<input name="departure" type="date" required class={field} /></label>
+        <div class="col-span-2">
+          <button type="button" id="dates-trigger" aria-haspopup="dialog" aria-describedby="dates-note" class="grid w-full cursor-pointer grid-cols-2 divide-x divide-ink/25 rounded-sm border border-ink/25 bg-white/70 text-left hover:border-ink/50">
+            <span class="px-3 py-2.5"><span class="block text-xs font-semibold uppercase tracking-wider text-muted">Arrival</span><span id="arrival-text">Add date</span></span>
+            <span class="px-3 py-2.5"><span class="block text-xs font-semibold uppercase tracking-wider text-muted">Departure</span><span id="departure-text">Add date</span></span>
+          </button>
+          <p id="dates-note" class="mt-1.5 text-sm text-muted empty:hidden"></p>
+          <input type="hidden" name="arrival" /><input type="hidden" name="departure" />
+        </div>
         <label class={label}>Adults<input name="adults" type="number" min="1" value="2" required class={field} /></label>
         <label class={label}>Children<input name="children" type="number" min="0" value="0" required class={field} /></label>
         <label class={`${label} col-span-2`}>Message
@@ -45,26 +61,88 @@ const field = 'mt-1.5 block w-full rounded-sm border border-ink/25 bg-white/70 p
       <noscript><p class="mt-4 text-sm text-muted">The form needs JavaScript.</p></noscript>
     </form>
   </div>
+
+  <dialog id="dates-dialog" closedby="any" aria-labelledby="dates-title" class="m-0 h-dvh max-h-none w-full max-w-none flex-col bg-paper text-ink backdrop:bg-ink/60 open:flex sm:m-auto sm:h-fit sm:max-h-[calc(100dvh-2rem)] sm:w-fit sm:rounded-sm">
+    <header class="flex items-start justify-between gap-4 border-b border-ink/15 px-5 py-4">
+      <div>
+        <h3 id="dates-title" class="font-display text-3xl leading-none">Your stay</h3>
+        <p id="dates-summary" class="mt-1 text-sm text-muted" aria-live="polite"></p>
+      </div>
+      <button type="button" data-close aria-label="Close" class="-mr-2 cursor-pointer rounded-full p-2 text-2xl leading-none hover:bg-ink/10">×</button>
+    </header>
+    <div class="flex-1 overflow-y-auto overscroll-contain px-5 py-5">
+      <calendar-range id="dates-range" months="13" locale="en-GB" first-day-of-week="1" class="mx-auto block w-full max-sm:[&::part(header)]:hidden [&::part(months)]:grid [&::part(months)]:gap-8 sm:[&::part(months)]:flex sm:[&>calendar-month:nth-of-type(n+3)]:hidden [&::part(button)]:cursor-pointer [&::part(button)]:rounded-full [&::part(button)]:p-2 [&::part(button)]:hover:bg-ink/10 [&::part(heading)]:hidden">
+        <span slot="previous" aria-label="Previous months">←</span>
+        <span slot="next" aria-label="Next months">→</span>
+        {Array.from({ length: 13 }, (_, i) => <calendar-month offset={i} class={month} />)}
+      </calendar-range>
+    </div>
+    <footer class="flex items-center justify-between border-t border-ink/15 px-5 py-4">
+      <button type="button" id="dates-clear" class="cursor-pointer text-sm font-medium underline underline-offset-4 hover:text-jade">Clear dates</button>
+      <button type="button" data-close class={`${cta} cursor-pointer bg-forest text-paper hover:bg-moss`}>Done</button>
+    </footer>
+  </dialog>
 </section>
 
 <script>
+  import 'cally';
   // Enquiry form. Delivery is not connected: validate, then say plainly that nothing was sent.
   const form = document.querySelector<HTMLFormElement>('#enquiry-form')!;
   const fields = document.querySelector<HTMLFieldSetElement>('#enquiry-fields')!;
   const status = document.querySelector<HTMLElement>('#enquiry-status')!;
   const input = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+  const $ = (id: string) => document.getElementById(id)!;
   const arrival = input('arrival'), departure = input('departure');
+  const trigger = $('dates-trigger'), note = $('dates-note'), summary = $('dates-summary');
+  const dialog = $('dates-dialog') as HTMLDialogElement;
+  const range = document.querySelector('calendar-range')!;
   fields.disabled = false;
+
+  // Two months side by side on wider screens; a scrolling list on phones.
+  // 13, not 12: Cally treats exactly 12 months as a January–December year view.
+  const wide = matchMedia('(min-width: 40rem)');
+  const setMonths = () => { range.months = wide.matches ? 2 : 13; };
+  setMonths();
+  wide.addEventListener('change', setMonths);
+
   const now = new Date();
-  arrival.min = departure.min = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-  const checkDates = () => departure.setCustomValidity(
-    arrival.value && departure.value && departure.value <= arrival.value ? 'Departure must be after arrival.' : '');
-  arrival.addEventListener('change', () => { if (arrival.value) departure.min = arrival.value; checkDates(); });
-  departure.addEventListener('change', checkDates);
+  range.min = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const day = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  const show = (iso: string) => day.format(new Date(`${iso}T12:00`));
+  const nights = (a: string, b: string) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5);
+  const plural = (n: number) => `${n} night${n === 1 ? '' : 's'}`;
+
+  const render = () => {
+    const [a = '', b = ''] = range.value ? range.value.split('/') : [];
+    arrival.value = a; departure.value = b;
+    $('arrival-text').textContent = a ? show(a) : 'Add date';
+    $('departure-text').textContent = b ? show(b) : 'Add date';
+    note.className = 'mt-1.5 text-sm text-muted empty:hidden';
+    note.textContent = a ? plural(nights(a, b)) : '';
+    summary.textContent = a ? `${show(a)} → ${show(b)} · ${plural(nights(a, b))}` : 'Choose your arrival date.';
+  };
+
+  range.addEventListener('rangestart', () => { summary.textContent = 'Now choose your departure date.'; });
+  range.addEventListener('change', () => {
+    const [a, b] = range.value.split('/');
+    if (a === b) { range.value = ''; range.tentative = a; summary.textContent = 'Stay at least one night. Choose your departure date.'; return; }
+    render();
+  });
+  $('dates-clear').addEventListener('click', () => { range.value = ''; range.tentative = ''; render(); });
+  dialog.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => dialog.close()));
+  dialog.addEventListener('close', () => { range.tentative = ''; render(); trigger.focus(); });
+  trigger.addEventListener('click', () => { dialog.showModal(); range.focus(); });
+  render();
+
   form.addEventListener('submit', e => {
     e.preventDefault();
-    checkDates();
     if (!form.reportValidity()) return;
+    if (!arrival.value) {
+      note.className = 'mt-1.5 text-sm font-medium text-red-700';
+      note.textContent = 'Choose your arrival and departure dates.';
+      trigger.focus();
+      return;
+    }
     status.textContent = 'Not sent: enquiry delivery is not connected yet.';
     status.focus();
   });
