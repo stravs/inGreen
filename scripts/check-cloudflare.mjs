@@ -37,9 +37,9 @@ try {
   const icon = await fetch(`${origin}/favicon.svg`);
   assert.equal(icon.status, 200);
   assert.ok(!icon.headers.get('cache-control')?.includes('immutable'));
-  const unit = await fetch(`${origin}/apartments/loft/`);
+  const unit = await fetch(`${origin}/apartments/tree-crown/`);
   assert.equal(unit.status, 200);
-  assert.match(await unit.text(), /<h1[^>]*>Loft<\/h1>/);
+  assert.match(await unit.text(), /<h1[^>]*>Tree crown<\/h1>/);
   assert.equal((await fetch(`${origin}/missing-page`)).status, 404);
   const redirect = await fetch(`${origin}/index.html`, { redirect: 'manual' });
   assert.equal(redirect.status, 307);

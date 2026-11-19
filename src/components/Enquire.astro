@@ -1,5 +1,5 @@
 ---
-import { booking, directions, units } from '../data/house';
+import { airbnb, booking, directions, units } from '../data/house';
 
 interface Props { unit?: string }
 const { unit = '' } = Astro.props;
@@ -28,6 +28,7 @@ const month = [
       <div class="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium">
         <a href={directions} rel="noopener" target="_blank" class="underline underline-offset-4 hover:text-river">Directions ↗</a>
         <a href={booking} rel="noopener" target="_blank" class="underline underline-offset-4 hover:text-river">Or book on Booking.com ↗</a>
+        <a href={airbnb} rel="noopener" target="_blank" class="underline underline-offset-4 hover:text-river">or Airbnb ↗</a>
       </div>
     </div>
 

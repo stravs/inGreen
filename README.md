@@ -6,9 +6,11 @@ Standalone Astro 7 + Tailwind v4 site. Private preview (`noindex`). Custom desig
 
 The property runs downhill: road → house → garden → steep forest → Sava Bohinjka. The page walks the same way.
 A thin green line under the fixed nav tracks your position. The nav is clear at the top and animates to white once you scroll (white without JS).
-The main call to action is the enquiry form (`#enquire`); Booking.com is the secondary link. Form delivery is not connected yet:
+The main call to action is the enquiry form (`#enquire`); Booking.com and Airbnb (one listing for the whole property) are secondary links. Form delivery is not connected yet:
 it validates, then says nothing was sent. The mobile menu is a native `popover`.
-Apartments are introduced by their own outdoor space (patio, peak-view terrace, outdoor kitchen, cabin porch).
+The house section draws the building as a tree: Tree crown (attic), Tree trunk (middle), Tree root (ground floor) on a
+vertical trunk line, then a ground line with the Chalet on the lawn.
+Apartment names are the host's own, as on Airbnb: Tree root (ground floor), Tree trunk (middle), Tree crown (loft), Chalet.
 Each apartment has its own page at `/apartments/<id>/` (hero, details, all photos, other apartments, enquiry form
 with that apartment preselected). Header, footer and enquiry form are shared components.
 
