@@ -8,7 +8,7 @@ The property runs downhill: road → house → garden → steep forest → Sava 
 A thin green line under the fixed nav tracks your position. The nav is clear at the top and animates to white once you scroll (white without JS).
 The main call to action is the enquiry form (`#enquire`); Booking.com is the secondary link. Form delivery is not connected yet:
 it validates, then says nothing was sent. The mobile menu is a native `popover`.
-Apartments are introduced by their own outdoor room (patio, peak-view terrace, outdoor kitchen, cabin porch).
+Apartments are introduced by their own outdoor space (patio, peak-view terrace, outdoor kitchen, cabin porch).
 Each apartment has its own page at `/apartments/<id>/` (hero, details, all photos, other apartments, enquiry form
 with that apartment preselected). Header, footer and enquiry form are shared components.
 

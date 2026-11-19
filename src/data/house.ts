@@ -25,7 +25,7 @@ export const nav = [['/#garden', 'Garden'], ['/#river', 'River'], ['/#host', 'Ho
 
 export const levels = [
   { id: 'road', name: 'The road', hint: 'Bus stop and parking at the gate' },
-  { id: 'house', name: 'The house', hint: 'Four apartments, four outdoor rooms' },
+  { id: 'house', name: 'The house', hint: 'Four apartments, four outdoor spaces' },
   { id: 'garden', name: 'The garden', hint: 'Pool, barbecue, vegetable beds' },
   { id: 'slope', name: 'The slope', hint: 'A steep forest path' },
   { id: 'river', name: 'The river', hint: 'The Sava Bohinjka' },
