@@ -76,7 +76,7 @@ const eyebrow = 'text-xs font-semibold uppercase tracking-[0.16em]';
     </Level>
 
     <!-- House -->
-    <Level {...levels[1]}>
+    <Level {...levels[1]} tone="fog">
       <div class="mx-auto max-w-6xl px-5 pt-8 sm:px-8">
         <div class="grid gap-6 md:grid-cols-12">
           <h2 class="font-display text-5xl leading-none sm:text-6xl md:col-span-7">Four homes,<br />four outdoor spaces.</h2>
@@ -91,38 +91,36 @@ const eyebrow = 'text-xs font-semibold uppercase tracking-[0.16em]';
     </Level>
 
     <!-- Garden -->
-    <div class="bg-fog">
-      <Level {...levels[2]}>
-        <div class="mx-auto max-w-6xl px-5 pb-16 pt-8 sm:px-8 lg:pb-20">
-          <div class="grid gap-6 md:grid-cols-12">
-            <h2 class="font-display text-5xl leading-none sm:text-6xl md:col-span-7">A big green garden, shared.</h2>
-            <p class="text-lg leading-relaxed md:col-span-5 md:pt-3">Eat outside with the view, light the barbecue, pick fresh vegetables, borrow a bike. Then cool off in the pool — small, seasonal, and up on the rooftop deck.</p>
-          </div>
-          <div class="mt-12 grid grid-cols-6 gap-3 sm:gap-4">
-            <div class="col-span-6 md:col-span-4"><Photo id="906117839" sizes="(min-width: 768px) 760px, 100vw" class="aspect-[16/10] rounded-sm" caption="The pool deck" /></div>
-            <div class="col-span-3 md:col-span-2"><Photo id="906117842" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] h-full rounded-sm md:aspect-auto md:max-h-[460px]" caption="Pool, garden, peaks" /></div>
-            <div class="col-span-3 md:col-span-2"><Photo id="208692856" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] rounded-sm md:aspect-[4/3]" caption="Vegetables to pick" /></div>
-            <div class="col-span-3 md:col-span-2"><Photo id="208744430" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] rounded-sm md:aspect-[4/3]" caption="Raspberries" /></div>
-            <div class="col-span-3 md:col-span-2"><Photo id="208744094" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] rounded-sm md:aspect-[4/3]" caption="Peonies" /></div>
-            <div class="col-span-6 md:col-span-3"><Photo id="257050856" sizes="(min-width: 768px) 560px, 100vw" class="aspect-[4/3] rounded-sm" caption="Deck, looking up the valley" /></div>
-            <div class="col-span-6 md:col-span-3"><Photo id="584790688" sizes="(min-width: 768px) 560px, 100vw" class="aspect-[4/3] rounded-sm" caption="The path down to the cabin" /></div>
-          </div>
-          <ul class="mt-12 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-4">
-            {['Seasonal pool, free', 'Sun loungers & umbrellas', 'Barbecue & outdoor fireplace', 'Picnic & outdoor dining', 'Vegetable beds', 'Bikes to hire from the hosts', 'Badminton & board games', 'Mountain & garden views'].map(t => (
-              <li class="border-t border-ink/15 py-3">{t}</li>
-            ))}
-          </ul>
+    <Level {...levels[2]}>
+      <div class="mx-auto max-w-6xl px-5 pb-16 pt-8 sm:px-8 lg:pb-20">
+        <div class="grid gap-6 md:grid-cols-12">
+          <h2 class="font-display text-5xl leading-none sm:text-6xl md:col-span-7">A big green garden, shared.</h2>
+          <p class="text-lg leading-relaxed md:col-span-5 md:pt-3">Eat outside with the view, light the barbecue, pick fresh vegetables, borrow a bike. Then cool off in the pool — small, seasonal, and up on the rooftop deck.</p>
         </div>
-      </Level>
-    </div>
+        <div class="mt-12 grid grid-cols-6 gap-3 sm:gap-4">
+          <div class="col-span-6 md:col-span-4"><Photo id="906117839" sizes="(min-width: 768px) 760px, 100vw" class="aspect-[16/10] rounded-sm" caption="The pool deck" /></div>
+          <div class="col-span-3 md:col-span-2"><Photo id="906117842" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] h-full rounded-sm md:aspect-auto md:max-h-[460px]" caption="Pool, garden, peaks" /></div>
+          <div class="col-span-3 md:col-span-2"><Photo id="208692856" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] rounded-sm md:aspect-[4/3]" caption="Vegetables to pick" /></div>
+          <div class="col-span-3 md:col-span-2"><Photo id="208744430" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] rounded-sm md:aspect-[4/3]" caption="Raspberries" /></div>
+          <div class="col-span-3 md:col-span-2"><Photo id="208744094" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] rounded-sm md:aspect-[4/3]" caption="Peonies" /></div>
+          <div class="col-span-6 md:col-span-3"><Photo id="257050856" sizes="(min-width: 768px) 560px, 100vw" class="aspect-[4/3] rounded-sm" caption="Deck, looking up the valley" /></div>
+          <div class="col-span-6 md:col-span-3"><Photo id="584790688" sizes="(min-width: 768px) 560px, 100vw" class="aspect-[4/3] rounded-sm" caption="The path down to the cabin" /></div>
+        </div>
+        <ul class="mt-12 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-4">
+          {['Seasonal pool, free', 'Sun loungers & umbrellas', 'Barbecue & outdoor fireplace', 'Picnic & outdoor dining', 'Vegetable beds', 'Bikes to hire from the hosts', 'Badminton & board games', 'Mountain & garden views'].map(t => (
+            <li class="border-t border-ink/15 py-3">{t}</li>
+          ))}
+        </ul>
+      </div>
+    </Level>
 
     <!-- Slope -->
-    <Level {...levels[3]} tone="dark">
+    <Level {...levels[3]} tone="fog">
       <div class="mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-8 sm:px-8 lg:grid-cols-12 lg:pb-20">
         <div class="lg:col-span-5">
           <h2 class="font-display text-5xl leading-none sm:text-6xl">Then the forest drops away.</h2>
-          <p class="mt-8 text-lg leading-relaxed text-paper/85">Below the garden a wooded slope falls steeply to the river. It is a scramble, not a stroll: wear proper shoes, and keep small children close.</p>
-          <p class="mt-4 text-lg leading-relaxed text-paper/85">The quiet is the point. Away from the traffic of Bled, what you hear is birds and water.</p>
+          <p class="mt-8 text-lg leading-relaxed text-muted">Below the garden a wooded slope falls steeply to the river. It is a scramble, not a stroll: wear proper shoes, and keep small children close.</p>
+          <p class="mt-4 text-lg leading-relaxed text-muted">The quiet is the point. Away from the traffic of Bled, what you hear is birds and water.</p>
         </div>
         <div class="lg:col-span-7">
           <Photo id="208744070" sizes="(min-width: 1024px) 660px, 100vw" class="aspect-[4/3] rounded-sm" caption="Look up: Babji zob above the forest" />
@@ -131,12 +129,13 @@ const eyebrow = 'text-xs font-semibold uppercase tracking-[0.16em]';
     </Level>
 
     <!-- River -->
-    <Level {...levels[4]} tone="dark">
-      <div class="relative mt-8">
+    <Level {...levels[4]} tone="dark" bare>
+      <div class="relative">
         <Photo id="339777424" sizes="100vw" class="h-[70vh] min-h-96" />
         <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-forest via-forest/70 to-transparent pt-32">
           <div class="mx-auto max-w-6xl px-5 pb-10 sm:px-8">
-            <h2 class="font-display text-6xl leading-none sm:text-8xl"><em>Sava Bohinjka.</em></h2>
+            <p class={`${eyebrow} text-river`}>{levels[4].name}</p>
+            <h2 class="mt-4 font-display text-6xl leading-none sm:text-8xl"><em>Sava Bohinjka.</em></h2>
           </div>
         </div>
       </div>

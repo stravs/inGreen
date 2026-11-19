@@ -1,13 +1,17 @@
 ---
 // One station of the descent: a section heading the depth line tracks.
-interface Props { id: string; name: string; tone?: 'light' | 'dark' }
-const { id, name, tone = 'light' } = Astro.props;
+interface Props { id: string; name: string; tone?: 'light' | 'fog' | 'dark'; bare?: boolean }
+const { id, name, tone = 'light', bare = false } = Astro.props;
+const bg = { light: '', fog: 'bg-fog', dark: 'bg-forest text-paper' }[tone];
+const onDark = tone === 'dark';
 ---
-<section id={id} data-level={id} class:list={[tone === 'dark' ? 'bg-forest text-paper' : '']}>
-  <div class="mx-auto max-w-6xl px-5 pt-16 sm:px-8 lg:pt-20">
-    <p class:list={['text-xs font-semibold uppercase tracking-[0.16em]', tone === 'dark' ? 'text-river' : 'text-jade']}>
-      {name}
-    </p>
-  </div>
+<section id={id} data-level={id} class={bg}>
+  {!bare && (
+    <div class="mx-auto max-w-6xl px-5 pt-16 sm:px-8 lg:pt-20">
+      <p class:list={['text-xs font-semibold uppercase tracking-[0.16em]', onDark ? 'text-river' : 'text-jade']}>
+        {name}
+      </p>
+    </div>
+  )}
   <slot />
 </section>
