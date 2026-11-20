@@ -1,19 +1,21 @@
 ---
 import Photo from './Photo.astro';
 import type { Unit } from '../data/house';
+import { useCopy } from '../i18n';
 
 // One apartment in the home-page tree: where it sits, what it is, one photo.
 interface Props { unit: Unit }
 const { unit } = Astro.props;
-const href = `/apartments/${unit.id}/`;
+const { c, url } = useCopy(Astro);
+const href = url(`/apartments/${unit.id}/`);
 ---
 <article class="grid gap-6 md:grid-cols-12 md:gap-10">
   <div class="md:col-span-7">
     <p class="font-medium text-jade">{unit.access}</p>
     <h3 class="mt-1 font-display text-5xl leading-none sm:text-6xl"><a href={href} class="hover:underline">{unit.name}</a></h3>
     <p class="mt-5 text-lg leading-relaxed">{unit.text}</p>
-    <p class="mt-4 text-muted">{unit.area} m² · sleeps {unit.sleeps} · {unit.bedrooms} {unit.bedrooms === 1 ? 'bedroom' : 'bedrooms'}</p>
-    <a href={href} class="mt-5 inline-block font-medium text-jade underline-offset-4 hover:underline">View {unit.name} →</a>
+    <p class="mt-4 text-muted">{c.unit.meta(unit.area, unit.sleeps, unit.bedrooms)}</p>
+    <a href={href} class="mt-5 inline-block font-medium text-jade underline-offset-4 hover:underline">{c.unit.view(unit.name)}</a>
   </div>
   <a href={href} tabindex="-1" aria-hidden="true" class="md:col-span-5">
     <Photo id={unit.hero} sizes="(min-width: 1024px) 420px, (min-width: 768px) 38vw, 100vw" class="aspect-[4/3] rounded-sm transition-opacity hover:opacity-85" />

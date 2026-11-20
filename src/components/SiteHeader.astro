@@ -1,21 +1,27 @@
 ---
-import { nav, units } from '../data/house';
+import { nav, unitsIn } from '../data/house';
+import { miska } from '../data/miska';
+import { useCopy } from '../i18n';
 
 const cta = 'inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-colors';
 const path = Astro.url.pathname;
-const href = (id: string) => `/apartments/${id}/`;
+const { c, url, other } = useCopy(Astro);
+const units = unitsIn(c);
+const href = (id: string) => url(`/apartments/${id}/`);
+const miskaHref = url(miska.href);
+const links = nav.map(id => [url(`/#${id}`), c.nav[id]] as const);
 ---
 <!-- Fixed nav: clear at the top, white on scroll, with a thin green progress line. -->
 <header id="site-header" class="group fixed inset-x-0 top-0 z-40 border-b border-ink/10 bg-white text-ink transition-colors duration-300
   data-over:border-white/0 data-over:bg-white/0 data-over:text-paper">
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
-    <a href="/" class="font-display text-2xl">InGreen House</a>
-    <nav aria-label="Main" class="hidden lg:block">
+    <a href={url('/')} class="whitespace-nowrap font-display text-2xl">InGreen House</a>
+    <nav aria-label={c.nav.main} class="hidden lg:block">
       <ul class="flex items-center gap-7 text-base font-medium">
         <!-- Apartments dropdown: opens on hover or keyboard focus, no JS. -->
         <li class="group/dd relative">
-          <a href="/#house" class="inline-flex items-center gap-1.5 underline-offset-4 hover:text-jade hover:underline group-data-over:hover:text-river">
-            Apartments <span aria-hidden="true" class="text-[10px] transition-transform group-hover/dd:rotate-180 group-focus-within/dd:rotate-180">▼</span>
+          <a href={url('/#house')} class="inline-flex items-center gap-1.5 underline-offset-4 hover:text-jade hover:underline group-data-over:hover:text-river">
+            {c.nav.apartments} <span aria-hidden="true" class="text-[10px] transition-transform group-hover/dd:rotate-180 group-focus-within/dd:rotate-180">▼</span>
           </a>
           <div class="invisible absolute left-1/2 top-full w-80 -translate-x-1/2 pt-4 opacity-0 transition duration-200 group-hover/dd:visible group-hover/dd:opacity-100 group-focus-within/dd:visible group-focus-within/dd:opacity-100">
             <ul class="rounded-sm border border-ink/10 bg-paper p-2 text-ink shadow-xl shadow-forest/20">
@@ -28,16 +34,25 @@ const href = (id: string) => `/apartments/${id}/`;
                   </a>
                 </li>
               ))}
-              <li class="mt-1 border-t border-ink/10"><a href="/#house" class="block px-4 pb-2 pt-3 text-jade hover:underline">All apartments →</a></li>
+              <!-- Studio Miška: Elizabeta's other place, a separate house about 2 km away -->
+              <li class="mt-1 border-t border-ink/10 pt-1">
+                <a href={miskaHref} aria-current={path === miskaHref ? 'page' : undefined}
+                  class="block rounded-sm px-4 py-3 transition-colors hover:bg-fog aria-[current=page]:bg-fog">
+                  <span class="block font-display text-xl leading-tight">{miska.name}</span>
+                  <span class="mt-0.5 block font-normal text-muted">{miska.area} m² · {c.miska.sleeps} · {c.nav.away}</span>
+                </a>
+              </li>
             </ul>
           </div>
         </li>
-        {nav.map(([href, label]) => <li><a href={href} class="underline-offset-4 hover:text-jade hover:underline group-data-over:hover:text-river">{label}</a></li>)}
+        {links.map(([href, label]) => <li><a href={href} class="underline-offset-4 hover:text-jade hover:underline group-data-over:hover:text-river">{label}</a></li>)}
       </ul>
     </nav>
     <div class="flex items-center gap-2">
-      <a href="#enquire" class="rounded-full bg-forest px-5 py-2.5 text-sm lg:text-base font-medium text-paper transition-colors hover:bg-moss group-data-over:bg-paper group-data-over:text-forest group-data-over:hover:bg-river">Enquire</a>
-      <button type="button" popovertarget="menu" class="cursor-pointer rounded-full border border-ink/30 px-4 py-2.5 text-sm font-medium group-data-over:border-paper/60 lg:hidden">Menu</button>
+      <a href={other} hreflang={c.other.label.toLowerCase()} lang={c.other.label.toLowerCase()} title={c.other.name} aria-label={c.other.name}
+        class="hidden rounded-full px-2.5 py-2.5 text-base font-medium underline-offset-4 hover:underline lg:inline-block">{c.other.label}</a>
+      <a href="#enquire" class="rounded-full bg-forest px-5 py-2.5 text-sm lg:text-base font-medium text-paper transition-colors hover:bg-moss group-data-over:bg-paper group-data-over:text-forest group-data-over:hover:bg-river">{c.nav.enquire}</a>
+      <button type="button" popovertarget="menu" class="cursor-pointer rounded-full border border-ink/30 px-4 py-2.5 text-sm font-medium group-data-over:border-paper/60 lg:hidden">{c.nav.menu}</button>
     </div>
   </div>
   <div aria-hidden="true" class="h-0.5 bg-jade" style="width: calc(var(--p, 0) * 100%)"></div>
@@ -46,29 +61,30 @@ const href = (id: string) => `/apartments/${id}/`;
 <script is:inline>{ if (scrollY < 8) document.getElementById('site-header').dataset.over = ''; }</script>
 
 <!-- Mobile menu: native popover, opens without JS. -->
-<div id="menu" popover class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-paper p-0 text-ink lg:hidden" aria-label="Menu">
+<div id="menu" popover class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-paper p-0 text-ink lg:hidden" aria-label={c.nav.menu}>
   <div class="flex items-center justify-between gap-4 border-b border-ink/10 px-5 py-3 sm:px-8">
-    <span class="font-display text-2xl">InGreen House</span>
-    <button type="button" popovertarget="menu" popovertargetaction="hide" class="cursor-pointer rounded-full border border-ink/30 px-4 py-2.5 text-sm font-medium">Close ✕</button>
+    <span class="whitespace-nowrap font-display text-2xl">InGreen House</span>
+    <a href={other} hreflang={c.other.label.toLowerCase()} lang={c.other.label.toLowerCase()} title={c.other.name} aria-label={c.other.name} class="ml-auto px-2 py-2.5 text-sm font-medium underline underline-offset-4">{c.other.label}</a>
+    <button type="button" popovertarget="menu" popovertargetaction="hide" class="cursor-pointer whitespace-nowrap rounded-full border border-ink/30 px-4 py-2.5 text-sm font-medium">{c.nav.close}</button>
   </div>
-  <nav aria-label="Mobile" class="px-5 py-6 sm:px-8">
+  <nav aria-label={c.nav.mobile} class="px-5 py-6 sm:px-8">
     <ul class="divide-y divide-ink/15 border-y border-ink/15">
       <li>
         <details open class="group/apt">
           <summary class="flex cursor-pointer list-none items-center justify-between py-4 font-display text-3xl [&::-webkit-details-marker]:hidden">
-            Apartments <span aria-hidden="true" class="font-body text-sm transition-transform group-open/apt:rotate-180">▼</span>
+            {c.nav.apartments} <span aria-hidden="true" class="font-body text-sm transition-transform group-open/apt:rotate-180">▼</span>
           </summary>
           <ul class="mb-4 ml-1 border-l border-jade/40 pl-4">
             {units.map(u => (
               <li><a href={href(u.id)} aria-current={path === href(u.id) ? 'page' : undefined} class="block py-2 aria-[current=page]:text-jade"><span class="block text-lg">{u.name}</span><span class="block text-sm text-muted">{u.area} m² · {u.sleeps}</span></a></li>
             ))}
-            <li><a href="/#house" class="block py-2 text-jade">All apartments →</a></li>
           </ul>
         </details>
       </li>
-      {nav.map(([href, label]) => <li><a href={href} class="block py-4 font-display text-3xl">{label}</a></li>)}
+      <li><a href={miskaHref} aria-current={path === miskaHref ? 'page' : undefined} class="block py-4 aria-[current=page]:text-jade"><span class="block font-display text-3xl">{miska.name}</span><span class="block text-sm text-muted">{miska.area} m² · {c.miska.sleeps} · {c.nav.away}</span></a></li>
+      {links.map(([href, label]) => <li><a href={href} class="block py-4 font-display text-3xl">{label}</a></li>)}
     </ul>
-    <a href="#enquire" class={`${cta} mt-8 w-full justify-center bg-forest text-paper hover:bg-moss`}>Send an enquiry</a>
+    <a href="#enquire" class={`${cta} mt-8 w-full justify-center bg-forest text-paper hover:bg-moss`}>{c.nav.sendEnquiry}</a>
   </nav>
 </div>
 

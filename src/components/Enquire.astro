@@ -1,8 +1,15 @@
 ---
-import { airbnb, booking, directions, units } from '../data/house';
+import { airbnb, booking, bookingIn, directions, street, unitsIn } from '../data/house';
+import { miska } from '../data/miska';
+import { useCopy } from '../i18n';
 
 interface Props { unit?: string }
 const { unit = '' } = Astro.props;
+const { lang, c } = useCopy(Astro);
+const t = c.enquire;
+const units = unitsIn(c);
+// Studio Miška is a separate house: its page shows its own address and listings.
+const place = unit === miska.id ? miska : { street, booking, airbnb, directions };
 const cta = 'inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-colors';
 const label = 'block text-sm font-medium';
 const field = 'mt-1.5 block w-full rounded-sm border border-ink/25 bg-white/70 px-3 py-2.5 text-base focus:border-jade';
@@ -21,66 +28,68 @@ const month = [
 <section id="enquire" class="bg-forest text-paper" aria-labelledby="enquire-title">
   <div class="mx-auto grid max-w-6xl gap-12 px-5 py-20 sm:px-8 lg:grid-cols-12 lg:py-24">
     <div class="lg:col-span-5">
-      <p class="text-xs font-semibold uppercase tracking-[0.16em] text-river">Enquire</p>
-      <h2 id="enquire-title" class="mt-4 font-display text-5xl leading-none sm:text-7xl">Come and listen.</h2>
-      <p class="mt-6 text-lg leading-relaxed text-paper/85">Tell Elizabeta when you want to come and who is coming. An enquiry is not a booking.</p>
-      <address class="mt-8 not-italic text-paper/80">Obrne 2, 4263 Bohinjska Bela, Slovenia</address>
+      <p class="text-xs font-semibold uppercase tracking-[0.16em] text-river">{t.eyebrow}</p>
+      <h2 id="enquire-title" class="mt-4 font-display text-5xl leading-none sm:text-7xl">{t.h2}</h2>
+      <p class="mt-6 text-lg leading-relaxed text-paper/85">{t.text}</p>
+      <address class="mt-8 not-italic text-paper/80">{place.street}, {c.country}</address>
       <div class="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium">
-        <a href={directions} rel="noopener" target="_blank" class="underline underline-offset-4 hover:text-river">Directions ↗</a>
-        <a href={booking} rel="noopener" target="_blank" class="underline underline-offset-4 hover:text-river">Or book on Booking.com ↗</a>
-        <a href={airbnb} rel="noopener" target="_blank" class="underline underline-offset-4 hover:text-river">or Airbnb ↗</a>
+        <a href={place.directions} rel="noopener" target="_blank" class="underline underline-offset-4 hover:text-river">{t.directions}</a>
+        <a href={bookingIn(place.booking, lang)} rel="noopener" target="_blank" class="underline underline-offset-4 hover:text-river">{t.booking}</a>
+        <a href={place.airbnb} rel="noopener" target="_blank" class="underline underline-offset-4 hover:text-river">{t.airbnb}</a>
       </div>
     </div>
 
-    <form id="enquiry-form" class="rounded-sm bg-paper p-6 text-ink sm:p-8 lg:col-span-7">
+    <form id="enquiry-form" data-strings={JSON.stringify(t.client)} class="rounded-sm bg-paper p-6 text-ink sm:p-8 lg:col-span-7">
       <fieldset disabled id="enquiry-fields" class="grid grid-cols-2 gap-x-4 gap-y-5 sm:gap-x-5">
-        <legend class="sr-only">Your enquiry</legend>
-        <label class={`${label} col-span-2 sm:col-span-1`}>Name<input name="name" autocomplete="name" required maxlength="100" class={field} /></label>
-        <label class={`${label} col-span-2 sm:col-span-1`}>Email<input name="email" type="email" autocomplete="email" required maxlength="254" class={field} /></label>
-        <label class={`${label} col-span-2`}>Apartment
+        <legend class="sr-only">{t.legend}</legend>
+        <label class={`${label} col-span-2 sm:col-span-1`}>{t.name}<input name="name" autocomplete="name" required maxlength="100" class={field} /></label>
+        <label class={`${label} col-span-2 sm:col-span-1`}>{t.email}<input name="email" type="email" autocomplete="email" required maxlength="254" class={field} /></label>
+        <label class={`${label} col-span-2`}>{t.apartment}
           <select name="unit" class={field}>
-            <option value="">Help me choose</option>
+            <option value="">{t.choose}</option>
             {units.map(u => <option value={u.id} selected={u.id === unit}>{u.name} ({u.sleeps})</option>)}
+            <option value={miska.id} selected={unit === miska.id}>{t.miskaOption(c.miska.sleeps)}</option>
           </select>
+          <span id="unit-note" class="mt-1.5 block text-sm font-normal text-muted" hidden>{t.miskaNote}</span>
         </label>
         <div class="col-span-2">
           <button type="button" id="dates-trigger" aria-haspopup="dialog" aria-describedby="dates-note" class="grid w-full cursor-pointer grid-cols-2 divide-x divide-ink/25 rounded-sm border border-ink/25 bg-white/70 text-left hover:border-ink/50">
-            <span class="px-3 py-2.5"><span class="block text-xs font-semibold uppercase tracking-wider text-muted">Arrival</span><span id="arrival-text">Add date</span></span>
-            <span class="px-3 py-2.5"><span class="block text-xs font-semibold uppercase tracking-wider text-muted">Departure</span><span id="departure-text">Add date</span></span>
+            <span class="px-3 py-2.5"><span class="block text-xs font-semibold uppercase tracking-wider text-muted">{t.arrival}</span><span id="arrival-text">{t.addDate}</span></span>
+            <span class="px-3 py-2.5"><span class="block text-xs font-semibold uppercase tracking-wider text-muted">{t.departure}</span><span id="departure-text">{t.addDate}</span></span>
           </button>
           <p id="dates-note" class="mt-1.5 text-sm text-muted empty:hidden"></p>
           <input type="hidden" name="arrival" /><input type="hidden" name="departure" />
         </div>
-        <label class={label}>Adults<input name="adults" type="number" min="1" value="2" required class={field} /></label>
-        <label class={label}>Children<input name="children" type="number" min="0" value="0" required class={field} /></label>
-        <label class={`${label} col-span-2`}>Message
-          <textarea name="message" rows="4" maxlength="3000" class={field} placeholder="Children's ages, pets, arrival time, questions…"></textarea>
+        <label class={label}>{t.adults}<input name="adults" type="number" min="1" value="2" required class={field} /></label>
+        <label class={label}>{t.children}<input name="children" type="number" min="0" value="0" required class={field} /></label>
+        <label class={`${label} col-span-2`}>{t.message}
+          <textarea name="message" rows="4" maxlength="3000" class={field} placeholder={t.placeholder}></textarea>
         </label>
-        <button type="submit" class={`${cta} cursor-pointer justify-center bg-forest text-paper hover:bg-moss col-span-2 sm:justify-self-start`}>Send enquiry</button>
+        <button type="submit" class={`${cta} cursor-pointer justify-center bg-forest text-paper hover:bg-moss col-span-2 sm:justify-self-start`}>{t.send}</button>
       </fieldset>
       <p id="enquiry-status" role="status" tabindex="-1" class="mt-4 text-sm font-medium text-jade empty:hidden"></p>
-      <noscript><p class="mt-4 text-sm text-muted">The form needs JavaScript.</p></noscript>
+      <noscript><p class="mt-4 text-sm text-muted">{t.noscript}</p></noscript>
     </form>
   </div>
 
   <dialog id="dates-dialog" closedby="any" aria-labelledby="dates-title" class="m-0 h-dvh max-h-none w-full max-w-none flex-col bg-paper text-ink backdrop:bg-ink/60 open:flex sm:m-auto sm:h-fit sm:max-h-[calc(100dvh-2rem)] sm:w-fit sm:rounded-sm">
     <header class="flex items-start justify-between gap-4 border-b border-ink/15 px-5 py-4">
       <div>
-        <h3 id="dates-title" class="font-display text-3xl leading-none">Your stay</h3>
+        <h3 id="dates-title" class="font-display text-3xl leading-none">{t.stay}</h3>
         <p id="dates-summary" class="mt-1 text-sm text-muted" aria-live="polite"></p>
       </div>
-      <button type="button" data-close aria-label="Close" class="-mr-2 cursor-pointer rounded-full p-2 text-2xl leading-none hover:bg-ink/10">×</button>
+      <button type="button" data-close aria-label={t.closeLabel} class="-mr-2 cursor-pointer rounded-full p-2 text-2xl leading-none hover:bg-ink/10">×</button>
     </header>
     <div class="flex-1 overflow-y-auto overscroll-contain px-5 py-5">
-      <calendar-range id="dates-range" months="13" locale="en-GB" first-day-of-week="1" class="mx-auto block w-full max-sm:[&::part(header)]:hidden [&::part(months)]:grid [&::part(months)]:gap-8 sm:[&::part(months)]:flex sm:[&>calendar-month:nth-of-type(n+3)]:hidden [&::part(button)]:cursor-pointer [&::part(button)]:rounded-full [&::part(button)]:p-2 [&::part(button)]:hover:bg-ink/10 [&::part(heading)]:hidden">
-        <span slot="previous" aria-label="Previous months">←</span>
-        <span slot="next" aria-label="Next months">→</span>
+      <calendar-range id="dates-range" months="13" locale={t.client.locale} first-day-of-week="1" class="mx-auto block w-full max-sm:[&::part(header)]:hidden [&::part(months)]:grid [&::part(months)]:gap-8 sm:[&::part(months)]:flex sm:[&>calendar-month:nth-of-type(n+3)]:hidden [&::part(button)]:cursor-pointer [&::part(button)]:rounded-full [&::part(button)]:p-2 [&::part(button)]:hover:bg-ink/10 [&::part(heading)]:hidden">
+        <span slot="previous" aria-label={t.prevMonths}>←</span>
+        <span slot="next" aria-label={t.nextMonths}>→</span>
         {Array.from({ length: 13 }, (_, i) => <calendar-month offset={i} class={month} />)}
       </calendar-range>
     </div>
     <footer class="flex items-center justify-between border-t border-ink/15 px-5 py-4">
-      <button type="button" id="dates-clear" class="cursor-pointer text-sm font-medium underline underline-offset-4 hover:text-jade">Clear dates</button>
-      <button type="button" data-close class={`${cta} cursor-pointer bg-forest text-paper hover:bg-moss`}>Done</button>
+      <button type="button" id="dates-clear" class="cursor-pointer text-sm font-medium underline underline-offset-4 hover:text-jade">{t.clear}</button>
+      <button type="button" data-close class={`${cta} cursor-pointer bg-forest text-paper hover:bg-moss`}>{t.done}</button>
     </footer>
   </dialog>
 </section>
@@ -89,6 +98,7 @@ const month = [
   import 'cally';
   // Enquiry form. Delivery is not connected: validate, then say plainly that nothing was sent.
   const form = document.querySelector<HTMLFormElement>('#enquiry-form')!;
+  const s = JSON.parse(form.dataset.strings!) as Record<string, string>;
   const fields = document.querySelector<HTMLFieldSetElement>('#enquiry-fields')!;
   const status = document.querySelector<HTMLElement>('#enquiry-status')!;
   const input = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
@@ -99,6 +109,17 @@ const month = [
   const range = document.querySelector('calendar-range')!;
   fields.disabled = false;
 
+  // Studio Miška is adults only.
+  const unitSelect = form.elements.namedItem('unit') as HTMLSelectElement, children = input('children');
+  const checkUnit = () => {
+    const adultsOnly = unitSelect.value === 'studio-miska';
+    $('unit-note').hidden = !adultsOnly;
+    children.setCustomValidity(adultsOnly && Number(children.value) > 0 ? s.adultsOnly : '');
+  };
+  unitSelect.addEventListener('change', checkUnit);
+  children.addEventListener('input', checkUnit);
+  checkUnit();
+
   // Two months side by side on wider screens; a scrolling list on phones.
   // 13, not 12: Cally treats exactly 12 months as a January–December year view.
   const wide = matchMedia('(min-width: 40rem)');
@@ -108,25 +129,27 @@ const month = [
 
   const now = new Date();
   range.min = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-  const day = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  const day = new Intl.DateTimeFormat(s.locale, { weekday: 'short', day: 'numeric', month: 'short' });
   const show = (iso: string) => day.format(new Date(`${iso}T12:00`));
   const nights = (a: string, b: string) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5);
-  const plural = (n: number) => `${n} night${n === 1 ? '' : 's'}`;
+  // Slovenian: 1, 101… noč; otherwise noči. English: 1 night; otherwise nights.
+  const one = (n: number) => (s.locale.startsWith('sl') ? n % 100 === 1 : n === 1);
+  const plural = (n: number) => `${n} ${one(n) ? s.night : s.nights}`;
 
   const render = () => {
     const [a = '', b = ''] = range.value ? range.value.split('/') : [];
     arrival.value = a; departure.value = b;
-    $('arrival-text').textContent = a ? show(a) : 'Add date';
-    $('departure-text').textContent = b ? show(b) : 'Add date';
+    $('arrival-text').textContent = a ? show(a) : s.addDate;
+    $('departure-text').textContent = b ? show(b) : s.addDate;
     note.className = 'mt-1.5 text-sm text-muted empty:hidden';
     note.textContent = a ? plural(nights(a, b)) : '';
-    summary.textContent = a ? `${show(a)} → ${show(b)} · ${plural(nights(a, b))}` : 'Choose your arrival date.';
+    summary.textContent = a ? `${show(a)} → ${show(b)} · ${plural(nights(a, b))}` : s.chooseArrival;
   };
 
-  range.addEventListener('rangestart', () => { summary.textContent = 'Now choose your departure date.'; });
+  range.addEventListener('rangestart', () => { summary.textContent = s.chooseDeparture; });
   range.addEventListener('change', () => {
     const [a, b] = range.value.split('/');
-    if (a === b) { range.value = ''; range.tentative = a; summary.textContent = 'Stay at least one night. Choose your departure date.'; return; }
+    if (a === b) { range.value = ''; range.tentative = a; summary.textContent = s.oneNight; return; }
     render();
   });
   $('dates-clear').addEventListener('click', () => { range.value = ''; range.tentative = ''; render(); });
@@ -140,11 +163,11 @@ const month = [
     if (!form.reportValidity()) return;
     if (!arrival.value) {
       note.className = 'mt-1.5 text-sm font-medium text-red-700';
-      note.textContent = 'Choose your arrival and departure dates.';
+      note.textContent = s.needDates;
       trigger.focus();
       return;
     }
-    status.textContent = 'Not sent: enquiry delivery is not connected yet.';
+    status.textContent = s.notSent;
     status.focus();
   });
 </script>

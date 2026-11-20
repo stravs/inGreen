@@ -1,0 +1,98 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Photo from '../../../components/Photo.astro';
+import UnitCard from '../../../components/UnitCard.astro';
+import Enquire from '../../../components/Enquire.astro';
+import Lightbox from '../../../components/Lightbox.astro';
+import { units as facts, unitsIn } from '../../../data/house';
+import { langPaths, useCopy } from '../../../i18n';
+
+export function getStaticPaths() {
+  return langPaths().flatMap(({ params }) => facts.map(u => ({ params: { ...params, id: u.id } })));
+}
+
+const { c, url } = useCopy(Astro);
+const units = unitsIn(c);
+const unit = units.find(u => u.id === Astro.params.id)!;
+const others = units.filter(u => u.id !== unit.id);
+const gallery = unit.photos.filter(id => id !== unit.hero);
+const eyebrow = 'text-xs font-semibold uppercase tracking-[0.16em]';
+const cta = 'inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-colors';
+---
+<Layout title={c.unit.title(unit.name)} description={c.unit.description(unit.area, unit.sleeps, unit.text)}>
+  <main id="top">
+    <!-- Hero: split, text beside the apartment's own best photo (same composition as Studio Miška) -->
+    <section class="bg-forest text-paper" aria-labelledby="unit-title">
+      <div class="mx-auto grid max-w-6xl items-end gap-10 px-5 pb-14 pt-28 sm:px-8 lg:grid-cols-12 lg:pb-20 lg:pt-36">
+        <div class="lg:col-span-5">
+          <p class={`${eyebrow} text-river`}><a href={url('/#house')} class="underline-offset-4 hover:underline">{c.nav.apartments}</a> · {unit.area} m² · {unit.sleeps}</p>
+          <h1 id="unit-title" class="mt-4 font-display text-[clamp(3rem,8vw,6.5rem)] leading-[0.92] tracking-tight">{unit.name}</h1>
+          <p class="mt-3 font-display text-3xl italic text-river">{unit.nickname}</p>
+          <p class="mt-6 max-w-md text-lg leading-relaxed text-paper/85">{unit.access}. {c.bedrooms(unit.bedrooms)}, {c.bathrooms(unit.bathrooms)}.</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#enquire" class={`${cta} bg-paper text-forest hover:bg-river`}>{c.nav.sendEnquiry}</a>
+            <button type="button" data-lightbox-open="0" class={`${cta} cursor-pointer border border-paper/60 hover:bg-paper hover:text-forest`}>{c.photos(unit.photos.length)}</button>
+          </div>
+        </div>
+        <div class="lg:col-span-7">
+          <Photo id={unit.hero} eager sizes="(min-width: 1152px) 640px, (min-width: 1024px) 56vw, 100vw" class="aspect-[16/10] rounded-sm" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Details -->
+    <section class="mx-auto grid max-w-6xl gap-12 px-5 py-16 sm:px-8 lg:grid-cols-12 lg:py-20">
+      <div class="lg:col-span-7">
+        <p class="text-xl leading-relaxed sm:text-2xl">{unit.text}</p>
+        <div class="mt-10 border-t border-ink/15 pt-5">
+          <h2 class={`${eyebrow} text-jade`}>{c.unit.outdoor}</h2>
+          <p class="mt-3 font-display text-3xl leading-tight">{unit.outdoor}</p>
+        </div>
+      </div>
+      <div class="lg:col-span-5">
+        <dl class="grid grid-cols-2 gap-x-6 border-t border-ink/15">
+          {[
+            [c.unit.size, `${unit.area} m²`],
+            [c.unit.sleeps, unit.sleeps],
+            [c.unit.bedrooms, String(unit.bedrooms)],
+            [c.unit.bathrooms, String(unit.bathrooms)],
+          ].map(([k, v]) => (
+            <div class="border-b border-ink/15 py-3"><dt class="text-sm text-muted">{k}</dt><dd class="mt-0.5">{v}</dd></div>
+          ))}
+          <div class="col-span-2 border-b border-ink/15 py-3"><dt class="text-sm text-muted">{c.unit.beds}</dt><dd class="mt-0.5">{unit.beds}</dd></div>
+          <div class="col-span-2 border-b border-ink/15 py-3"><dt class="text-sm text-muted">{c.unit.access}</dt><dd class="mt-0.5">{unit.access}</dd></div>
+        </dl>
+        <ul class="mt-5 flex flex-wrap gap-2 text-sm">
+          {unit.extras.map(e => <li class="rounded-full border border-ink/20 px-3 py-1">{e}</li>)}
+        </ul>
+        <a href="#enquire" class="mt-8 inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-moss">{c.unit.enquire}</a>
+      </div>
+    </section>
+
+    <!-- Photos: Booking's own photo associations for this unit -->
+    <section class="mx-auto max-w-6xl px-5 pb-16 sm:px-8 lg:pb-20" aria-labelledby="photos-title">
+      <h2 id="photos-title" class="font-display text-4xl">{c.gallery.title} <span class="font-body text-base text-muted">· {unit.photos.length}</span></h2>
+      <div class="mt-8 columns-1 gap-3 sm:columns-2 lg:columns-3">
+        {gallery.map(id => (
+          <button type="button" data-lightbox-open={unit.photos.indexOf(id)} aria-label={c.gallery.open}
+            class="group mb-3 block w-full cursor-zoom-in overflow-hidden rounded-sm break-inside-avoid">
+            <Photo id={id} sizes="(min-width: 1024px) 370px, (min-width: 640px) 50vw, 100vw" class="transition-transform duration-300 group-hover:scale-[1.03]" />
+          </button>
+        ))}
+      </div>
+    </section>
+    <Lightbox photos={unit.photos} label={c.gallery.label(unit.name)} />
+
+    <!-- The other apartments -->
+    <section class="bg-fog" aria-labelledby="others-title">
+      <div class="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-20">
+        <h2 id="others-title" class="font-display text-4xl sm:text-5xl">{c.unit.others}</h2>
+        <ul class="mt-10 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+          {others.map(u => <li><UnitCard unit={u} /></li>)}
+        </ul>
+      </div>
+    </section>
+
+    <Enquire unit={unit.id} />
+  </main>
+</Layout>

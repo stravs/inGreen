@@ -3,12 +3,14 @@ import { Font } from 'astro:assets';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import '../styles/global.css';
+import { useCopy } from '../i18n';
 
 interface Props { title: string; description: string }
 const { title, description } = Astro.props;
+const { lang } = useCopy(Astro);
 ---
 <!doctype html>
-<html lang="en" class="scroll-pt-16 has-[dialog[open]]:overflow-hidden">
+<html lang={lang} class="scroll-pt-16 has-[dialog[open]]:overflow-hidden">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

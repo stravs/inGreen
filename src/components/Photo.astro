@@ -1,12 +1,13 @@
 ---
 import { Image } from 'astro:assets';
 import { photo } from '../data/house';
+import { useCopy } from '../i18n';
 
 // `cover`: the photo fills a full-width box this many vh tall (object-cover). On portrait screens it is then
 // drawn wider than the viewport, so `sizes` is derived from the photo's ratio and full resolution is offered.
 interface Props { id: string; sizes?: string; cover?: number; class?: string; eager?: boolean; caption?: string }
 const { id, cover, class: className = '', eager = false, caption } = Astro.props;
-const p = photo(id);
+const p = photo(id, useCopy(Astro).lang);
 const coverVw = cover && Math.round(cover * p.src.width / p.src.height);
 const sizes = coverVw ? `(max-aspect-ratio: ${coverVw}/100) ${coverVw}vh, 100vw` : Astro.props.sizes!;
 const max = cover ? p.src.width : Math.min(p.src.width, 2400);

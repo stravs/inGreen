@@ -14,6 +14,8 @@ const family = (name, cssVariable, fallbacks, variants) => ({ provider: fontProv
 export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
+  // English at the root, Slovenian under /sl/.
+  i18n: { locales: ['en', 'sl'], defaultLocale: 'en', routing: { prefixDefaultLocale: false } },
   image: { layout: 'constrained', responsiveStyles: false },
   fonts: [
     family('Instrument Serif', '--ff-display', ['Georgia', 'serif'], [

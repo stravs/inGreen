@@ -14,6 +14,17 @@ Apartment names are the host's own, as on Airbnb: Tree root (ground floor), Tree
 Each apartment has its own page at `/apartments/<id>/` (hero, details, all photos, other apartments, enquiry form
 with that apartment preselected). Header, footer and enquiry form are shared components.
 
+Two languages: English at `/`, Slovenian at `/sl/` (Astro i18n, `prefixDefaultLocale: false`). Pages live in
+`src/pages/[...lang]/` and build once per language. All visible text is in `src/i18n/en.ts` and `src/i18n/sl.ts`
+(same shape, typed); `src/data` holds facts only. Alt texts: `alts.json` and `alts.sl.json`. The header links to the
+same page in the other language. Slovenian apartment names (Korenina, Deblo, Krošnja, Brunarica) are translations of the
+host's English names: owner to confirm.
+
+Studio Miška (`/studio-miska/`) is Elizabeta's second place: a separate house about 2 km away (owner, 2026-11-20).
+It is not a level and not one of the four units: a fog band after Host links to it, plus the nav dropdown, mobile
+menu and footer. Its page has a split hero because its listing photos are only 1024 px wide. Same enquiry form
+and inbox; picking Miška shows "adults only" and blocks children > 0. Facts are in `src/data/miska.ts`.
+
 ## Cloudflare Workers
 
 Static assets only: no SSR adapter, Worker script, runtime secrets or database needed.
@@ -69,6 +80,7 @@ References: [Astro deployment](https://docs.astro.build/en/guides/deploy/cloudfl
   (small pool, very steep slope, stairs). No review text, names or quotes are published. The slope warning comes from
   reviews, not the listing: the owner should confirm it.
 - Host quote and host details come from the host's own listing text.
+- Studio Miška: its Booking.com listing and the reviewed Studio Miška site; distance, ownership and private terrace from the owner. Its fishing photo is left out (location unknown).
 
 ## Run
 

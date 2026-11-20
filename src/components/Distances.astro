@@ -1,14 +1,16 @@
 ---
 import { nearby } from '../data/house';
-const fmt = (m: number) => (m < 1000 ? `${m} m` : `${(m / 1000).toLocaleString('en', { maximumFractionDigits: 1 })} km`);
+import { useCopy } from '../i18n';
+const { lang, c } = useCopy(Astro);
+const fmt = (m: number) => (m < 1000 ? `${m} m` : `${(m / 1000).toLocaleString(lang, { maximumFractionDigits: 1 })} km`);
 ---
 <div>
   <ol class="grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
     {nearby.map(p => (
       <li class="flex items-baseline justify-between gap-4 border-b border-paper/15 py-3">
-        <span>{p.name}</span><span class="tabular-nums text-river">{fmt(p.metres)}</span>
+        <span>{c.nearby[p.key]}</span><span class="tabular-nums text-river">{fmt(p.metres)}</span>
       </li>
     ))}
   </ol>
-  <p class="mt-4 text-sm text-paper/60">Approximate distances, not travel times.</p>
+  <p class="mt-4 text-sm text-paper/60">{c.nearby.note}</p>
 </div>

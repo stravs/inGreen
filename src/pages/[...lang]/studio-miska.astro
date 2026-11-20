@@ -1,0 +1,92 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Photo from '../../components/Photo.astro';
+import Enquire from '../../components/Enquire.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import { miska } from '../../data/miska';
+import { langPaths, useCopy } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+
+const { c } = useCopy(Astro);
+const m = c.miska;
+
+const gallery = miska.photos.filter(id => id !== miska.hero);
+const eyebrow = 'text-xs font-semibold uppercase tracking-[0.16em]';
+const cta = 'inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-colors';
+---
+<Layout title={m.title} description={m.description}>
+  <main id="top">
+    <!-- Hero: split, not full-bleed. The listing photos are 1024 px wide and must not be upscaled. -->
+    <section class="bg-forest text-paper" aria-labelledby="miska-title">
+      <div class="mx-auto grid max-w-6xl items-end gap-10 px-5 pb-14 pt-28 sm:px-8 lg:grid-cols-12 lg:pb-20 lg:pt-36">
+        <div class="lg:col-span-5">
+          <p class={`${eyebrow} text-river`}>{m.eyebrow}</p>
+          <h1 id="miska-title" class="mt-4 font-display text-[clamp(3rem,8vw,6.5rem)] leading-[0.92] tracking-tight">{miska.name}</h1>
+          <p class="mt-3 font-display text-3xl italic text-river">{m.subtitle}</p>
+          <p class="mt-6 max-w-md text-lg leading-relaxed text-paper/85">{m.intro}</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#enquire" class={`${cta} bg-paper text-forest hover:bg-river`}>{c.nav.sendEnquiry}</a>
+            <button type="button" data-lightbox-open="0" class={`${cta} cursor-pointer border border-paper/60 hover:bg-paper hover:text-forest`}>{c.photos(miska.photos.length)}</button>
+          </div>
+        </div>
+        <div class="lg:col-span-7">
+          <Photo id={miska.hero} eager sizes="(min-width: 1152px) 640px, (min-width: 1024px) 56vw, 100vw" class="aspect-[16/10] rounded-sm" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Details -->
+    <section class="mx-auto grid max-w-6xl gap-12 px-5 py-16 sm:px-8 lg:grid-cols-12 lg:py-20">
+      <div class="lg:col-span-7">
+        <p class="text-xl leading-relaxed sm:text-2xl">{m.text}</p>
+        <div class="mt-10 border-t border-ink/15 pt-5">
+          <h2 class={`${eyebrow} text-jade`}>{c.unit.outdoor}</h2>
+          <p class="mt-3 font-display text-3xl leading-tight">{m.outdoor}</p>
+        </div>
+      </div>
+      <div class="lg:col-span-5">
+        <dl class="grid grid-cols-2 gap-x-6 border-t border-ink/15">
+          {[[c.unit.size, `${miska.area} m²`], [c.unit.sleeps, m.sleeps]].map(([k, v]) => (
+            <div class="border-b border-ink/15 py-3"><dt class="text-sm text-muted">{k}</dt><dd class="mt-0.5">{v}</dd></div>
+          ))}
+          {[[m.bed, m.beds], [c.unit.access, m.access], [m.where, `${miska.street}, ${c.country}`]].map(([k, v]) => (
+            <div class="col-span-2 border-b border-ink/15 py-3"><dt class="text-sm text-muted">{k}</dt><dd class="mt-0.5">{v}</dd></div>
+          ))}
+        </dl>
+        <ul class="mt-5 flex flex-wrap gap-2 text-sm">
+          {m.extras.map(e => <li class="rounded-full border border-ink/20 px-3 py-1">{e}</li>)}
+        </ul>
+        <a href="#enquire" class={`${cta} mt-8 bg-forest text-paper hover:bg-moss`}>{m.enquire}</a>
+      </div>
+    </section>
+
+    <!-- Photos -->
+    <section class="mx-auto max-w-6xl px-5 pb-16 sm:px-8 lg:pb-20" aria-labelledby="photos-title">
+      <h2 id="photos-title" class="font-display text-4xl">{c.gallery.title} <span class="font-body text-base text-muted">· {miska.photos.length}</span></h2>
+      <div class="mt-8 columns-1 gap-3 sm:columns-2 lg:columns-3">
+        {gallery.map(id => (
+          <button type="button" data-lightbox-open={miska.photos.indexOf(id)} aria-label={c.gallery.open}
+            class="group mb-3 block w-full cursor-zoom-in overflow-hidden rounded-sm break-inside-avoid">
+            <Photo id={id} sizes="(min-width: 1024px) 370px, (min-width: 640px) 50vw, 100vw" class="transition-transform duration-300 group-hover:scale-[1.03]" />
+          </button>
+        ))}
+      </div>
+    </section>
+    <Lightbox photos={[...miska.photos]} label={c.gallery.label(miska.name)} />
+
+    <!-- Good to know -->
+    <section class="mx-auto max-w-6xl px-5 pb-16 sm:px-8 lg:pb-20" aria-labelledby="know-title">
+      <div class="grid gap-10 border-t border-ink/15 pt-16 lg:grid-cols-12">
+        <h2 id="know-title" class="font-display text-5xl leading-none lg:col-span-4">{m.know}</h2>
+        <dl class="grid gap-x-10 sm:grid-cols-2 lg:col-span-8">
+          {m.practical.map(([k, v]) => (
+            <div class="border-t border-ink/15 py-4"><dt class="font-semibold">{k}</dt><dd class="mt-1 leading-relaxed text-muted">{v}</dd></div>
+          ))}
+        </dl>
+      </div>
+    </section>
+
+    <Enquire unit={miska.id} />
+  </main>
+</Layout>

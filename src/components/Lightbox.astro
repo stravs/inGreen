@@ -2,9 +2,11 @@
 // Full-screen photo viewer. Open with any button carrying data-lightbox-open="<index>".
 // Swipe or scroll natively (scroll-snap); buttons and arrow keys step one photo.
 import Photo from './Photo.astro';
+import { useCopy } from '../i18n';
 
 interface Props { photos: string[]; label: string }
 const { photos, label } = Astro.props;
+const { c } = useCopy(Astro);
 const nav = 'absolute top-1/2 hidden size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-paper/10 text-2xl transition-colors hover:bg-paper/25 sm:flex';
 ---
 <dialog id="lightbox" closedby="any" aria-label={label}
@@ -12,7 +14,7 @@ const nav = 'absolute top-1/2 hidden size-12 -translate-y-1/2 cursor-pointer ite
   <div class="relative flex h-full flex-col">
     <div class="flex items-center justify-between gap-4 px-5 py-3 sm:px-8">
       <p class="text-sm tabular-nums"><span data-lightbox-count>1</span> / {photos.length}</p>
-      <button type="button" command="close" commandfor="lightbox" class="cursor-pointer rounded-full border border-paper/50 px-4 py-2 text-sm font-medium hover:bg-paper hover:text-ink">Close ✕</button>
+      <button type="button" command="close" commandfor="lightbox" class="cursor-pointer rounded-full border border-paper/50 px-4 py-2 text-sm font-medium hover:bg-paper hover:text-ink">{c.nav.close}</button>
     </div>
     <div data-lightbox-track tabindex="-1" class="flex min-h-0 flex-1 snap-x snap-mandatory overflow-x-auto overscroll-x-contain outline-none [scrollbar-width:none]">
       {photos.map(id => (
@@ -21,8 +23,8 @@ const nav = 'absolute top-1/2 hidden size-12 -translate-y-1/2 cursor-pointer ite
         </div>
       ))}
     </div>
-    <button type="button" data-lightbox-step="-1" aria-label="Previous photo" class={`${nav} left-4`}>‹</button>
-    <button type="button" data-lightbox-step="1" aria-label="Next photo" class={`${nav} right-4`}>›</button>
+    <button type="button" data-lightbox-step="-1" aria-label={c.gallery.prev} class={`${nav} left-4`}>‹</button>
+    <button type="button" data-lightbox-step="1" aria-label={c.gallery.next} class={`${nav} right-4`}>›</button>
   </div>
 </dialog>
 

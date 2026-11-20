@@ -1,15 +1,17 @@
 ---
 import Photo from './Photo.astro';
 import type { Unit } from '../data/house';
+import { useCopy } from '../i18n';
 
 interface Props { unit: Unit }
 const { unit } = Astro.props;
+const { c, url } = useCopy(Astro);
 ---
-<a href={`/apartments/${unit.id}/`} class="group block">
+<a href={url(`/apartments/${unit.id}/`)} class="group block">
   <Photo id={unit.hero} sizes="(min-width: 1024px) 360px, (min-width: 640px) 45vw, 100vw" class="aspect-[4/3] rounded-sm transition-opacity group-hover:opacity-85" />
   <h3 class="mt-4 font-display text-2xl leading-tight group-hover:underline">{unit.name}</h3>
   <p class="font-display text-lg italic text-muted">{unit.nickname}</p>
   <p class="mt-2 text-sm leading-relaxed">{unit.outdoor}</p>
   <p class="mt-2 text-sm text-muted">{unit.area} m² · {unit.sleeps}</p>
-  <p class="mt-3 text-sm font-medium text-jade">View apartment →</p>
+  <p class="mt-3 text-sm font-medium text-jade">{c.unit.card}</p>
 </a>

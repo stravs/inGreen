@@ -1,0 +1,204 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Photo from '../../components/Photo.astro';
+import Level from '../../components/Level.astro';
+import HouseRow from '../../components/HouseRow.astro';
+import Distances from '../../components/Distances.astro';
+import Enquire from '../../components/Enquire.astro';
+import { levels, unitsIn } from '../../data/house';
+import { miska } from '../../data/miska';
+import { langPaths, useCopy } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+
+const { c, url } = useCopy(Astro);
+const h = c.home;
+const units = unitsIn(c);
+const byId = (id: string) => units.find(u => u.id === id)!;
+const tree = ['tree-crown', 'tree-trunk', 'tree-root'].map(byId);
+const chalet = byId('chalet');
+const level = (id: (typeof levels)[number]) => ({ id, name: c.levels[id].name });
+const miskaHref = url(miska.href);
+const node = 'absolute -left-[9px] top-1.5 size-4 rounded-full border-[3px] border-fog bg-moss';
+
+const cta = 'inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-colors';
+const eyebrow = 'text-xs font-semibold uppercase tracking-[0.16em]';
+---
+<Layout title={h.title} description={h.description}>
+
+  <main id="top">
+    <!-- Hero: the whole property in one frame, house above the garden, forest behind -->
+    <section class="relative isolate flex min-h-[38rem] h-svh flex-col justify-end overflow-hidden bg-forest text-paper" aria-labelledby="hero-title">
+      <Photo id="906117913" eager cover={100} class="absolute inset-0 -z-10 h-full object-[30%_45%] motion-safe:animate-settle" />
+      <div aria-hidden="true" class="absolute inset-0 -z-10 bg-gradient-to-t from-forest via-forest/80 via-55% to-forest/0 to-90% sm:via-forest/70 sm:via-35% sm:to-80%"></div>
+      <div aria-hidden="true" class="absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-forest/60 to-forest/0"></div>
+      <div aria-hidden="true" class="absolute inset-0 -z-10 hidden bg-gradient-to-r from-forest/60 via-forest/25 via-40% to-forest/0 to-65% lg:block"></div>
+      <div class="mx-auto w-full max-w-6xl px-5 pb-10 sm:px-8 sm:pb-14 lg:pb-16">
+        <p class={`${eyebrow} text-paper`}>{h.eyebrow}</p>
+        <h1 id="hero-title" class="mt-5 font-display text-[clamp(3.4rem,10vw,8.5rem)] leading-[0.88] tracking-tight [text-shadow:0_2px_30px_rgb(27_47_34/.45)]">
+          {h.h1[0]}<br /><em class="text-river">{h.h1[1]}</em>
+        </h1>
+        <div class="mt-8 grid gap-8 lg:grid-cols-12 lg:items-end">
+          <p class="max-w-xl text-lg leading-relaxed text-paper/90 lg:col-span-7">{h.intro}</p>
+          <div class="flex flex-wrap gap-3 lg:col-span-5 lg:justify-end">
+            <a href="#enquire" class={`${cta} bg-paper text-forest hover:bg-river`}>{c.nav.sendEnquiry}</a>
+            <a href="#house" class={`${cta} border border-paper/60 hover:bg-paper hover:text-forest`}>{h.seeApartments} <span aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Index: the five stations, road to river -->
+    <nav aria-label={h.index} class="mx-auto hidden max-w-6xl px-5 pt-16 md:block sm:px-8 lg:pt-20">
+      <ol class="grid gap-x-6 sm:grid-cols-2 lg:grid-cols-5">
+        {levels.map(id => (
+          <li>
+            <a href={`#${id}`} class="group block border-t border-ink/20 py-4 transition-colors hover:border-jade">
+              <span class="block font-display text-3xl text-jade group-hover:underline">{c.levels[id].name}</span>
+              <span class="block text-sm text-muted">{c.levels[id].hint}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <!-- Road -->
+    <Level {...level('road')}>
+      <div class="mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-8 sm:px-8 lg:grid-cols-12 lg:pb-20">
+        <div class="lg:col-span-6">
+          <h2 class="font-display text-5xl leading-none sm:text-6xl">{h.road.h2}</h2>
+          <dl class="mt-10 divide-y divide-ink/15 border-y border-ink/15">
+            {h.road.facts.map(([k, v]) => (
+              <div class="grid grid-cols-[6.5rem_1fr] items-baseline gap-4 py-5 sm:grid-cols-[8rem_1fr]">
+                <dt class="font-display text-4xl text-jade sm:text-5xl">{k}</dt><dd class="leading-relaxed">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <div class="lg:col-span-6 lg:pt-4">
+          <Photo id="208743654" sizes="(min-width: 1024px) 560px, 100vw" class="aspect-[4/3] rounded-sm" caption={h.road.caption} />
+        </div>
+      </div>
+    </Level>
+
+    <!-- House -->
+    <Level {...level('house')} tone="fog">
+      <div class="mx-auto max-w-6xl px-5 pt-8 sm:px-8">
+        <div class="grid gap-6 md:grid-cols-12">
+          <h2 class="font-display text-5xl leading-none sm:text-6xl md:col-span-7">{h.house.h2[0]}<br />{h.house.h2[1]}</h2>
+          <p class="text-lg leading-relaxed text-muted md:col-span-5 md:pt-3">{h.house.text}</p>
+        </div>
+        <!-- The tree: crown at the top, root at the bottom, joined by the trunk line -->
+        <ol class="mt-14 ml-2 border-l-2 border-moss/30 sm:ml-3" aria-label={h.house.tree}>
+          {tree.map(u => <li class="relative pb-14 pl-7 sm:pl-12"><span aria-hidden="true" class={node}></span><HouseRow unit={u} /></li>)}
+        </ol>
+        <!-- Ground level: the chalet stands apart, on the lawn -->
+        <div class="border-t-2 border-moss/30 pb-16 pt-10 pl-2 sm:pl-3 lg:pb-20">
+          <div class="pl-7 sm:pl-12"><HouseRow unit={chalet} /></div>
+        </div>
+      </div>
+    </Level>
+
+    <!-- Garden -->
+    <Level {...level('garden')}>
+      <div class="mx-auto max-w-6xl px-5 pb-16 pt-8 sm:px-8 lg:pb-20">
+        <div class="grid gap-6 md:grid-cols-12">
+          <h2 class="font-display text-5xl leading-none sm:text-6xl md:col-span-7">{h.garden.h2}</h2>
+          <p class="text-lg leading-relaxed md:col-span-5 md:pt-3">{h.garden.text}</p>
+        </div>
+        <div class="mt-12 grid grid-cols-6 gap-3 sm:gap-4">
+          <div class="col-span-6 md:col-span-4"><Photo id="906117839" sizes="(min-width: 768px) 760px, 100vw" class="aspect-[16/10] rounded-sm" caption={h.garden.captions[0]} /></div>
+          <div class="col-span-3 md:col-span-2"><Photo id="906117842" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] h-full rounded-sm md:aspect-auto md:max-h-[460px]" caption={h.garden.captions[1]} /></div>
+          <div class="col-span-3 md:col-span-2"><Photo id="208692856" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] rounded-sm md:aspect-[4/3]" caption={h.garden.captions[2]} /></div>
+          <div class="col-span-3 md:col-span-2"><Photo id="208744430" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] rounded-sm md:aspect-[4/3]" caption={h.garden.captions[3]} /></div>
+          <div class="col-span-3 md:col-span-2"><Photo id="208744094" sizes="(min-width: 768px) 370px, 50vw" class="aspect-[3/4] rounded-sm md:aspect-[4/3]" caption={h.garden.captions[4]} /></div>
+          <div class="col-span-6 md:col-span-3"><Photo id="257050856" sizes="(min-width: 768px) 560px, 100vw" class="aspect-[4/3] rounded-sm" caption={h.garden.captions[5]} /></div>
+          <div class="col-span-6 md:col-span-3"><Photo id="584790688" sizes="(min-width: 768px) 560px, 100vw" class="aspect-[4/3] rounded-sm" caption={h.garden.captions[6]} /></div>
+        </div>
+        <ul class="mt-12 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-4">
+          {h.garden.features.map(t => <li class="border-t border-ink/15 py-3">{t}</li>)}
+        </ul>
+      </div>
+    </Level>
+
+    <!-- Slope -->
+    <Level {...level('slope')} tone="fog">
+      <div class="mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-8 sm:px-8 lg:grid-cols-12 lg:pb-20">
+        <div class="lg:col-span-5">
+          <h2 class="font-display text-5xl leading-none sm:text-6xl">{h.slope.h2}</h2>
+          <p class="mt-8 text-lg leading-relaxed text-muted">{h.slope.text[0]}</p>
+          <p class="mt-4 text-lg leading-relaxed text-muted">{h.slope.text[1]}</p>
+        </div>
+        <div class="lg:col-span-7">
+          <Photo id="208744070" sizes="(min-width: 1024px) 660px, 100vw" class="aspect-[4/3] rounded-sm" caption={h.slope.caption} />
+        </div>
+      </div>
+    </Level>
+
+    <!-- River -->
+    <Level {...level('river')} tone="dark" bare>
+      <div class="relative">
+        <Photo id="339777424" cover={70} class="h-[70vh] min-h-96" />
+        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-forest via-forest/70 to-transparent pt-32">
+          <div class="mx-auto max-w-6xl px-5 pb-10 sm:px-8">
+            <p class={`${eyebrow} text-river`}>{c.levels.river.name}</p>
+            <h2 class="mt-4 font-display text-6xl leading-none sm:text-8xl"><em>{h.river.h2}</em></h2>
+          </div>
+        </div>
+      </div>
+      <div class="mx-auto grid max-w-6xl gap-10 px-5 pb-12 pt-10 sm:px-8 md:grid-cols-3 lg:pb-16">
+        {h.river.items.map(([t, d]) => (
+          <div class="border-t border-paper/25 pt-4"><h3 class="font-display text-2xl">{t}</h3><p class="mt-2 leading-relaxed text-paper/85">{d}</p></div>
+        ))}
+      </div>
+      <div class="mx-auto max-w-6xl px-5 pb-16 sm:px-8 lg:pb-20">
+        <h3 class="mb-6 font-display text-4xl">{h.river.fromGate}</h3>
+        <Distances />
+      </div>
+    </Level>
+
+    <!-- Host -->
+    <section id="host" class="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="host-title">
+      <p class={`${eyebrow} text-jade`} id="host-title">{h.host.eyebrow}</p>
+      <blockquote class="mt-6 max-w-4xl font-display text-[clamp(2.2rem,5.5vw,4.5rem)] italic leading-[1.05]">{h.host.quote}</blockquote>
+      <div class="mt-8 grid gap-6 md:grid-cols-12">
+        <p class="font-display text-2xl md:col-span-4">Elizabeta Gradnik</p>
+        <p class="text-lg leading-relaxed text-muted md:col-span-8">{h.host.text}</p>
+      </div>
+    </section>
+
+    <!-- Studio Miška: Elizabeta's other place, 2 km away. Not a level: it stays out of the road-to-river walk. -->
+    <section id="miska" class="bg-fog" aria-labelledby="miska-title">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-16 sm:px-8 md:grid-cols-12 md:items-center lg:py-20">
+        <a href={miskaHref} tabindex="-1" aria-hidden="true" class="md:col-span-5">
+          <Photo id={miska.hero} sizes="(min-width: 1152px) 440px, (min-width: 768px) 40vw, 100vw" class="aspect-[4/3] rounded-sm transition-opacity hover:opacity-85" />
+        </a>
+        <div class="md:col-span-7">
+          <p class={`${eyebrow} text-jade`}>{h.miska.eyebrow}</p>
+          <h2 id="miska-title" class="mt-4 font-display text-5xl leading-none sm:text-6xl"><a href={miskaHref} class="hover:underline">{h.miska.h2}</a></h2>
+          <p class="mt-5 text-lg leading-relaxed">{h.miska.text}</p>
+          <p class="mt-4 text-muted">{miska.area} m² · {c.miska.sleeps} · {c.miska.beds}</p>
+          <a href={miskaHref} class="mt-5 inline-block font-medium text-jade underline-offset-4 hover:underline">{h.miska.link}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Before you book -->
+    <section id="know" class="mx-auto max-w-6xl px-5 pb-16 sm:px-8 lg:pb-24" aria-labelledby="know-title">
+      <div class="grid gap-10 border-t border-ink/15 pt-16 lg:grid-cols-12 lg:pt-24">
+        <div class="lg:col-span-4">
+          <h2 id="know-title" class="font-display text-5xl leading-none">{h.know.h2}</h2>
+          <p class="mt-5 leading-relaxed text-muted">{h.know.text}</p>
+        </div>
+        <dl class="grid gap-x-10 sm:grid-cols-2 lg:col-span-8">
+          {c.practical.map(([k, v]) => (
+            <div class="border-t border-ink/15 py-4"><dt class="font-semibold">{k}</dt><dd class="mt-1 leading-relaxed text-muted">{v}</dd></div>
+          ))}
+        </dl>
+      </div>
+    </section>
+
+    <Enquire />
+  </main>
+
+</Layout>
