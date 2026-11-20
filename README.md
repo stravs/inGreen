@@ -20,7 +20,7 @@ Two languages: English at `/`, Slovenian at `/sl/` (Astro i18n, `prefixDefaultLo
 same page in the other language. Slovenian apartment names (Korenina, Deblo, Krošnja, Brunarica) are translations of the
 host's English names: owner to confirm.
 
-Studio Miška (`/studio-miska/`) is Elizabeta's second place: a separate house about 2 km away (owner, 2026-11-20).
+Studio Miška (`/studio-miska/`) is Elizabeta's second place: a separate house about 3 km away by road (2.5 km straight line between the Booking.com map pins).
 It is not a level and not one of the four units: a fog band after Host links to it, plus the nav dropdown, mobile
 menu and footer. Its page has a split hero because its listing photos are only 1024 px wide. Same enquiry form
 and inbox; picking Miška shows "adults only" and blocks children > 0. Facts are in `src/data/miska.ts`.

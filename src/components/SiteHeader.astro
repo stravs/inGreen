@@ -34,7 +34,7 @@ const links = nav.map(id => [url(`/#${id}`), c.nav[id]] as const);
                   </a>
                 </li>
               ))}
-              <!-- Studio Miška: Elizabeta's other place, a separate house about 2 km away -->
+              <!-- Studio Miška: Elizabeta's other place, a separate house about 3 km away -->
               <li class="mt-1 border-t border-ink/10 pt-1">
                 <a href={miskaHref} aria-current={path === miskaHref ? 'page' : undefined}
                   class="block rounded-sm px-4 py-3 transition-colors hover:bg-fog aria-[current=page]:bg-fog">
@@ -78,10 +78,11 @@ const links = nav.map(id => [url(`/#${id}`), c.nav[id]] as const);
             {units.map(u => (
               <li><a href={href(u.id)} aria-current={path === href(u.id) ? 'page' : undefined} class="block py-2 aria-[current=page]:text-jade"><span class="block text-lg">{u.name}</span><span class="block text-sm text-muted">{u.area} m² · {u.sleeps}</span></a></li>
             ))}
+            <!-- Studio Miška: a separate house about 3 km away, set apart like in the desktop dropdown -->
+            <li class="mt-2 border-t border-ink/15 pt-2"><a href={miskaHref} aria-current={path === miskaHref ? 'page' : undefined} class="block py-2 aria-[current=page]:text-jade"><span class="block text-lg">{miska.name}</span><span class="block text-sm text-muted">{miska.area} m² · {c.miska.sleeps} · {c.nav.away}</span></a></li>
           </ul>
         </details>
       </li>
-      <li><a href={miskaHref} aria-current={path === miskaHref ? 'page' : undefined} class="block py-4 aria-[current=page]:text-jade"><span class="block font-display text-3xl">{miska.name}</span><span class="block text-sm text-muted">{miska.area} m² · {c.miska.sleeps} · {c.nav.away}</span></a></li>
       {links.map(([href, label]) => <li><a href={href} class="block py-4 font-display text-3xl">{label}</a></li>)}
     </ul>
     <a href="#enquire" class={`${cta} mt-8 w-full justify-center bg-forest text-paper hover:bg-moss`}>{c.nav.sendEnquiry}</a>

@@ -16,7 +16,7 @@ export const sl: Copy = {
   nav: {
     main: 'Glavni meni', mobile: 'Mobilni meni', menu: 'Meni', close: 'Zapri ✕',
     apartments: 'Apartmaji', garden: 'Vrt', river: 'Reka', host: 'Gostiteljica', know: 'Dobro je vedeti',
-    enquire: 'Povpraševanje', sendEnquiry: 'Pošljite povpraševanje', away: '2 km stran',
+    enquire: 'Povpraševanje', sendEnquiry: 'Pošljite povpraševanje', away: '3 km stran',
   },
 
   levels: {
@@ -104,7 +104,7 @@ export const sl: Copy = {
       caption: 'Hiša z vaške ceste',
     },
     house: {
-      h2: ['Ena hiša,', 'zrasla kot drevo.'],
+      h2: ['Med drevesi.', 'Kot doma.'],
       text: 'Trije apartmaji drug nad drugim, od korenin do krošnje, in samostojna brunarica na trati. Vsak ima svoj vhod, svojo kuhinjo in prostor za obedovanje zunaj, z žarom. Staro in novo se prepletata povsod, vsa posteljnina je bombažna.',
       tree: 'Hiša, od vrha navzdol',
     },
@@ -116,7 +116,7 @@ export const sl: Copy = {
     },
     slope: {
       h2: 'Potem se gozd strmo spusti.',
-      text: ['Pod vrtom se gozdnato pobočje strmo spušča k reki. To je plezanje, ne sprehod: obujte primerne čevlje in majhne otroke imejte blizu.', 'Tišina je bistvo. Daleč od blejskega prometa slišite ptice in vodo.'],
+      text: ['Pod vrtom se gozdnato pobočje strmo spušča k reki. Pot je zahtevna, ne sprehod: obujte primerne čevlje in pazite na majhne otroke.', 'Tišina je bistvo. Daleč od blejskega prometa slišite ptice in vodo.'],
       caption: 'Poglejte gor: Babji zob nad gozdom',
     },
     river: {
@@ -136,7 +136,7 @@ export const sl: Copy = {
     miska: {
       eyebrow: 'Tudi pri Elizabeti',
       h2: 'Studio Miška, za dva.',
-      text: 'Pritlični studio z lastnim vhodom in zasebno teraso, približno 2 km stran v Bohinjski Beli. Samo za odrasle: miren kotiček za par.',
+      text: 'Pritlični studio z lastnim vhodom in zasebno teraso, približno 3 km stran v Bohinjski Beli. Samo za odrasle: miren kotiček za par.',
       link: 'Oglejte si Studio Miška →',
     },
     know: { h2: 'Dobro je vedeti pred rezervacijo.', text: 'Majhen bazen, strmo pobočje, stopnice. Bolje, da veste zdaj kot ob prihodu.' },
@@ -158,10 +158,10 @@ export const sl: Copy = {
 
   miska: {
     title: 'Studio Miška — studio za dva v Bohinjski Beli',
-    description: '21 m², za 2 odrasla, z zasebno teraso. Elizabetin studio, približno 2 km od hiše InGreen House.',
+    description: '21 m², za 2 odrasla, z zasebno teraso. Elizabetin studio, približno 3 km od hiše InGreen House.',
     eyebrow: 'Tudi pri Elizabeti · Bohinjska Bela',
     subtitle: 'studio za dva',
-    intro: 'Pritlični studio z lastnim vhodom in zasebno teraso. Približno 2 km od hiše InGreen House.',
+    intro: 'Pritlični studio z lastnim vhodom in zasebno teraso. Približno 3 km od hiše InGreen House.',
     sleeps: '2 odrasla', beds: '1 velika zakonska postelja', access: 'Pritličje, lasten vhod',
     text: 'En svetel prostor v pritličju, v vasi Bohinjska Bela: zakonska postelja, okrogla miza za dva, majhna kuhinja in kopalnica s tušem brez praga. Vhodna vrata so samo vaša.',
     outdoor: 'Zasebna terasa z vrtnim kavčem in stoli pod nadstreškom.',
@@ -185,7 +185,7 @@ export const sl: Copy = {
     text: 'Elizabeti sporočite datume in kdo pride. Povpraševanje ni rezervacija.',
     directions: 'Navodila za pot ↗', booking: 'Ali rezervirajte na Booking.com ↗', airbnb: 'ali Airbnb ↗',
     legend: 'Vaše povpraševanje', name: 'Ime', email: 'E-pošta', apartment: 'Apartma', choose: 'Pomagajte mi izbrati',
-    miskaOption: (sleeps: string) => `Studio Miška (${sleeps}, 2 km stran)`,
+    miskaOption: (sleeps: string) => `Studio Miška (${sleeps}, 3 km stran)`,
     miskaNote: 'Studio Miška je samo za odrasle: brez otrok in hišnih ljubljenčkov.',
     arrival: 'Prihod', departure: 'Odhod', addDate: 'Dodaj datum',
     adults: 'Odrasli', children: 'Otroci', message: 'Sporočilo',

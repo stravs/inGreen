@@ -11,7 +11,7 @@ export const en = {
   nav: {
     main: 'Main', mobile: 'Mobile', menu: 'Menu', close: 'Close ✕',
     apartments: 'Apartments', garden: 'Garden', river: 'River', host: 'Host', know: 'Good to know',
-    enquire: 'Enquire', sendEnquiry: 'Send an enquiry', away: '2 km away',
+    enquire: 'Enquire', sendEnquiry: 'Send an enquiry', away: '3 km away',
   },
 
   levels: {
@@ -133,7 +133,7 @@ export const en = {
     miska: {
       eyebrow: 'Also from Elizabeta',
       h2: 'Studio Miška, for two.',
-      text: 'A ground-floor studio with its own entrance and a private terrace, about 2 km away in Bohinjska Bela. Adults only: a quiet place for a couple.',
+      text: 'A ground-floor studio with its own entrance and a private terrace, about 3 km away in Bohinjska Bela. Adults only: a quiet place for a couple.',
       link: 'See Studio Miška →',
     },
     know: { h2: 'Good to know before you book.', text: 'Small pool, steep slope, stairs. Better to know now than on arrival.' },
@@ -155,10 +155,10 @@ export const en = {
 
   miska: {
     title: 'Studio Miška — a studio for two in Bohinjska Bela',
-    description: "21 m², for 2 adults, with a private terrace. Elizabeta's studio, about 2 km from InGreen House.",
+    description: "21 m², for 2 adults, with a private terrace. Elizabeta's studio, about 3 km from InGreen House.",
     eyebrow: 'Also from Elizabeta · Bohinjska Bela',
     subtitle: 'a studio for two',
-    intro: 'A ground-floor studio with its own entrance and a private terrace. About 2 km from InGreen House.',
+    intro: 'A ground-floor studio with its own entrance and a private terrace. About 3 km from InGreen House.',
     sleeps: '2 adults', beds: '1 large double bed', access: 'Ground floor, private entrance',
     text: 'One bright room on the ground floor, in the village of Bohinjska Bela: a double bed, a round table for two, a small kitchen and a bathroom with a walk-in shower. The front door is your own.',
     outdoor: 'A private terrace with an outdoor sofa and chairs under a canopy.',
@@ -182,7 +182,7 @@ export const en = {
     text: 'Tell Elizabeta your dates and who is coming. An enquiry is not a booking.',
     directions: 'Directions ↗', booking: 'Or book on Booking.com ↗', airbnb: 'or Airbnb ↗',
     legend: 'Your enquiry', name: 'Name', email: 'Email', apartment: 'Apartment', choose: 'Help me choose',
-    miskaOption: (sleeps: string) => `Studio Miška (${sleeps}, 2 km away)`,
+    miskaOption: (sleeps: string) => `Studio Miška (${sleeps}, 3 km away)`,
     miskaNote: 'Studio Miška is for adults only: no children, no pets.',
     arrival: 'Arrival', departure: 'Departure', addDate: 'Add date',
     adults: 'Adults', children: 'Children', message: 'Message',

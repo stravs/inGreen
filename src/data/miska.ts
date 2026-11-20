@@ -1,4 +1,5 @@
-// Studio Miška: Elizabeta's second place, a separate house about 2 km from InGreen House (owner, 2026-11-20).
+// Studio Miška: Elizabeta's second place (owner, 2026-11-20), a separate house about 3 km from InGreen House by road.
+// Distance: Booking.com map pins, 2.5 km straight line; shortest OSRM car route 2.96 km (checked 2026-11-20).
 // Facts: Booking.com listing and the reviewed Studio Miška site (data/runs/studio-miska). Private terrace: owner.
 // Copy is in src/i18n. Photos keep their Booking IDs. 885265713 is white-balance adjusted to match the exterior set.
 // The listing's fishing photo is left out: its location is unknown.
