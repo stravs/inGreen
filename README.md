@@ -24,6 +24,8 @@ Studio Miška (`/studio-miska/`) is Elizabeta's second place: a separate house a
 It is not a level and not one of the four units: a fog band after Host links to it, plus the nav dropdown, mobile
 menu and footer. Its page has a split hero because its listing photos are only 1024 px wide. Same enquiry form
 and inbox; picking Miška shows a "no pets" note. Children are allowed (owner). Facts are in `src/data/miska.ts`.
+Photos (2026-11-20): white balance, levels and light sharpening on all; tilt and converging verticals corrected on
+interiors and buildings (bottom corners cropped up to 9%); raised-bed photo 208692856 cropped. Unedited originals are in commit 70511aa.
 
 ## Cloudflare Workers
 
