@@ -109,15 +109,10 @@ const month = [
   const range = document.querySelector('calendar-range')!;
   fields.disabled = false;
 
-  // Studio Miška is adults only.
-  const unitSelect = form.elements.namedItem('unit') as HTMLSelectElement, children = input('children');
-  const checkUnit = () => {
-    const adultsOnly = unitSelect.value === 'studio-miska';
-    $('unit-note').hidden = !adultsOnly;
-    children.setCustomValidity(adultsOnly && Number(children.value) > 0 ? s.adultsOnly : '');
-  };
+  // Studio Miška: no pets. Show the note when it is picked.
+  const unitSelect = form.elements.namedItem('unit') as HTMLSelectElement;
+  const checkUnit = () => { $('unit-note').hidden = unitSelect.value !== 'studio-miska'; };
   unitSelect.addEventListener('change', checkUnit);
-  children.addEventListener('input', checkUnit);
   checkUnit();
 
   // Two months side by side on wider screens; a scrolling list on phones.
